@@ -25,6 +25,7 @@
     "test:meals-lists": "node tests/meals-lists.test.mjs",
     "test:calendar": "node tests/holidays.test.mjs && node tests/calendar.test.mjs",
     "test:holidays": "node tests/holidays.test.mjs",
+    "test:signup": "node tests/signup.test.mjs",
     "test:access": "node tests/access.test.mjs",
     "test:google-reauth": "node tests/google-reauth.test.mjs",
     "test:sync-button": "node tests/sync-button.test.mjs",

@@ -34,6 +34,10 @@ docker compose logs app    # shows the generated password if you left it empty
 
 Open `http://<your-host>:3000` and sign in with the bootstrap account. The owner account has every feature, including external calendars. Invite family members under **Settings -> Who has access?**; they join with a single-use link.
 
+## Letting other families sign up
+
+Set `SIGNUP_CODE` in `.env` to a long random string (`openssl rand -hex 16`) and restart. Then share `https://<your-host>/signup?code=<code>`. Everyone who opens the link can create an account and gets their **own household** (separate from yours) and the setup wizard. `SIGNUP_LIMIT` (default 25) caps the number of families. To stop signups, empty `SIGNUP_CODE` or change it; existing accounts keep working.
+
 ## 3. HTTPS with a reverse proxy
 
 Example `Caddyfile` (Caddy gets and renews the certificate automatically):

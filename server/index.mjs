@@ -293,6 +293,27 @@ async function handleRequest(req, res) {
     return json(res, 201, { email: joined.email, role: joined.role });
   }
 
+  // Signup link: SIGNUP_CODE enables /signup?code=... for families that get their own household (limited by SIGNUP_LIMIT).
+  const signupCode = process.env.SIGNUP_CODE || '';
+  if (url.pathname === '/signup' && req.method === 'GET' && !signupCode) { res.writeHead(404, securityHeaders); return res.end('Not found'); }
+  if (url.pathname === '/api/auth/signup' && req.method === 'POST') {
+    if (!signupCode) return json(res, 404, { error: 'signup_disabled' });
+    if (throttled(`signup:${clientKey(req)}`, 15)) return json(res, 429, { error: 'too_many_attempts' });
+    let input; try { input = await readJson(req); } catch { return json(res, 400, { error: 'invalid_json' }); }
+    if (hashInviteCode(input.code ?? '') !== hashInviteCode(signupCode)) return json(res, 403, { error: 'invalid_code' });
+    const email = String(input.email ?? '').trim().toLowerCase(); const password = String(input.password ?? '');
+    if (!EMAIL_PATTERN.test(email)) return json(res, 400, { error: 'invalid_email' });
+    if (password.length < 8) return json(res, 400, { error: 'password_too_short' });
+    const used = [...auth.accounts.values()].filter(item => item.origin === 'signup-link').length;
+    if (used >= Number(process.env.SIGNUP_LIMIT ?? 25)) return json(res, 403, { error: 'signup_limit_reached' });
+    if (auth.findAccountByEmail(email)) return json(res, 409, { error: 'email_taken' });
+    const householdId = randomUUID(); getBundle(householdId);
+    const created = { id: randomUUID(), email, passwordHash: await hashPassword(password), householdId, role: 'owner', tier: process.env.SIGNUP_TIER || 'self-hosted', origin: 'signup-link', createdAt: new Date().toISOString() };
+    auth.accounts.set(created.id, created);
+    auth.setSessionCookie(res, auth.createSession(created.id));
+    return json(res, 201, { email: created.email, role: created.role });
+  }
+
   if ((url.pathname === '/app' || url.pathname === '/display.html') && !account) { res.writeHead(302, { Location: '/login' }); return res.end(); }
   if (url.pathname.startsWith('/api/') && !account) return json(res, 401, { error: 'unauthenticated' });
 
@@ -446,7 +467,7 @@ async function handleRequest(req, res) {
   const eventMatch = url.pathname.match(/^\/api\/calendar\/events\/([^/]+)$/); if (eventMatch && (req.method === 'PUT' || req.method === 'DELETE')) { const providerId = eventMatch[1]; if (!events.has(providerId)) return json(res, 404, { error: 'event_not_found' }); if (req.method === 'DELETE') { events.delete(providerId); return json(res, 200, { deleted: true, providerId }); } let body = ''; for await (const chunk of req) body += chunk; try { const current = events.get(providerId); if (privacyMask(calendarConnections)(current).private) return json(res, 403, { error: 'event_private' }); const update = JSON.parse(body); if (!update.title?.trim() || !update.startsAt) return json(res, 400, { error: 'invalid_event' }); const owners = Array.isArray(update.owners) ? update.owners.filter(Boolean) : (update.owner ? [update.owner] : (current.owners ?? [current.owner])); const item = { ...current, title: update.title.trim(), startsAt: update.startsAt, endsAt: update.endsAt !== undefined ? update.endsAt : current.endsAt, owner: owners[0], owners, recurrence: update.recurrence ?? current.recurrence, allDay: update.allDay !== undefined ? Boolean(update.allDay) : current.allDay, eventType: update.eventType !== undefined ? update.eventType : current.eventType, location: update.location !== undefined ? (update.location?.trim() || null) : current.location, ...eventExtras(update) }; if (update.recurrence === undefined) item.recurrence = current.recurrence ?? null; events.set(providerId, item); return json(res, 200, item); } catch { return json(res, 400, { error: 'invalid_json' }); } }
 
   if (url.pathname === '/') { res.writeHead(302, { Location: '/app' }); return res.end(); } // the portal: / opens the app (which asks for the login first)
-  const requested = url.pathname === '/app' ? '/index.html' : url.pathname === '/login' ? '/login.html' : url.pathname === '/join' ? '/join.html' : url.pathname === '/styleguide' ? '/styleguide.html' : url.pathname === '/favicon.ico' ? '/assets/brand/favicon.ico' : url.pathname === '/apple-touch-icon.png' ? '/assets/brand/apple-touch-icon.png' : url.pathname;
+  const requested = url.pathname === '/app' ? '/index.html' : url.pathname === '/login' ? '/login.html' : url.pathname === '/join' ? '/join.html' : url.pathname === '/signup' ? '/signup.html' : url.pathname === '/styleguide' ? '/styleguide.html' : url.pathname === '/favicon.ico' ? '/assets/brand/favicon.ico' : url.pathname === '/apple-touch-icon.png' ? '/assets/brand/apple-touch-icon.png' : url.pathname;
   // Static files come from an allowlist only: public web assets in the root and /f/. Server code, state
   // files (/data), docs, tests and dependencies must never be reachable over HTTP.
   if (!isPublicAsset(requested)) { res.writeHead(404, securityHeaders); return res.end('Not found'); }

@@ -20,6 +20,8 @@ services:
       # First login (only used while no account exists yet). Leave BOOTSTRAP_PASSWORD empty to get a random one in the app log.
       BOOTSTRAP_EMAIL: ${BOOTSTRAP_EMAIL:-admin@example.com}
       BOOTSTRAP_PASSWORD: ${BOOTSTRAP_PASSWORD:-}
+      SIGNUP_CODE: ${SIGNUP_CODE:-}
+      SIGNUP_LIMIT: ${SIGNUP_LIMIT:-25}
       # Encrypts calendar credentials at rest. If empty, a random key is generated into the data volume.
       CREDENTIALS_KEY: ${CREDENTIALS_KEY:-}
       PUBLIC_HOST: ${PUBLIC_HOST:-}

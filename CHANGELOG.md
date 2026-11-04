@@ -4,6 +4,8 @@ All notable changes to Dulli are documented here. The format follows [Keep a Cha
 
 ## [Unreleased]
 
+- Added: signup link. Set `SIGNUP_CODE` and share `/signup?code=...`: every family that uses it gets its own household and the setup wizard (`SIGNUP_LIMIT` caps the number of families).
+
 ## [1.0.0] - 2026-11-04
 
 First public release.
