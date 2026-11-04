@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+const base = process.env.BASE_URL ?? 'http://127.0.0.1:3000';
+const health = await (await fetch(`${base}/api/health`)).json();
+assert.equal(health.mode, 'postgres');
+const title = `postgres-smoke-${Date.now()}`;
+const headers = { 'Content-Type': 'application/json', 'Idempotency-Key': `postgres-${title}` };
+const first = await fetch(`${base}/api/tasks`, { method: 'POST', headers, body: JSON.stringify({ title, owner: 'Jordan' }) });
+assert.equal(first.status, 201);
+const duplicate = await fetch(`${base}/api/tasks`, { method: 'POST', headers, body: JSON.stringify({ title, owner: 'Jordan' }) });
+assert.equal(duplicate.status, 200);
+const tasks = await (await fetch(`${base}/api/tasks`)).json();
+assert.equal(tasks.filter(task => task.title === title).length, 1);
+console.log('postgres: health, mutation, idempotency and read passed');

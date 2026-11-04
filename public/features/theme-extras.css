@@ -1,0 +1,366 @@
+/* Familienzentrale look for everything outside calendar/tasks/treasures/meals/lists (docs/design.md).
+   Only tokens from public/css/theme.css; #f4f5f8 is the spec's field/sidebar grey. Loaded after the feature styles. */
+
+/* ---------- AA contrast: theme --muted (#8a94a0, 3.1:1) is too light for body text in these areas ---------- */
+.jd-more,.settings-panel,.members-panel,.school-panel,.photos-panel,.today-grid,.welcome,dialog,.jd-pin-dialog,.login-shell,.marketing,.shared-display{--muted:#66707b}
+
+/* ---------- Shared primitives ---------- */
+.jd-tile-ic{display:inline-grid;place-items:center;flex:0 0 auto;width:40px;height:40px;border-radius:13px;background:var(--p-grey);color:var(--d-grey)}
+.jd-tile-ic svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+[data-tone="rose"]{--tone-bg:var(--p-rose);--tone-fg:#b44f60}
+[data-tone="sun"]{--tone-bg:var(--p-sun);--tone-fg:#8a6a00}
+[data-tone="peach"]{--tone-bg:var(--p-peach);--tone-fg:#a65f12}
+[data-tone="sky"]{--tone-bg:var(--p-sky);--tone-fg:var(--teal-strong)}
+[data-tone="lav"]{--tone-bg:var(--p-lav);--tone-fg:#5650b0}
+[data-tone="mint"]{--tone-bg:var(--p-mint);--tone-fg:#2f7d50}
+[data-tone="teal"]{--tone-bg:var(--p-teal);--tone-fg:#25736e}
+[data-tone="grey"]{--tone-bg:var(--p-grey);--tone-fg:#56606c}
+.jd-tile-ic[data-tone]{background:var(--tone-bg);color:var(--tone-fg)}
+
+/* Pill fields (spec: #f4f5f8, no border) */
+:where(.jd-more,.settings-panel,.members-panel,.school-panel,.photos-panel,dialog,.login-card) :is(input,select,textarea):not(.jd-raw):not(:where([type=checkbox],[type=radio],[type=color],[type=file],[type=range])){min-height:48px;border:0;border-radius:999px;background:var(--fill);color:var(--ink);padding:0 18px;font:inherit;font-weight:600;box-shadow:none}
+:where(.jd-more,.settings-panel,.members-panel,.school-panel,.photos-panel,dialog,.login-card) textarea{border-radius:18px;padding:12px 18px}
+:where(.jd-more,.settings-panel,.members-panel,.school-panel,.photos-panel,dialog,.login-card) select{appearance:none;-webkit-appearance:none;padding-right:42px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2366707b' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;background-size:16px;cursor:pointer}
+:where(.jd-more,.settings-panel,.members-panel,.school-panel,.photos-panel,dialog,.login-card) :is(input,select,textarea):focus-visible{outline:none;box-shadow:var(--focus-ring);background-color:var(--paper)}
+:where(.jd-more,.settings-panel,.members-panel,.school-panel,.photos-panel,dialog,.login-card) ::placeholder{color:var(--muted)}
+
+/* Blue switches */
+.jd-toggle,.jd-switch input[type=checkbox][role=switch],dialog input[type=checkbox][role=switch]{appearance:none;-webkit-appearance:none;position:relative;width:52px;height:32px;flex:0 0 52px;margin:0;border-radius:999px;background:var(--fill-3);cursor:pointer;transition:background .2s}
+.jd-toggle::before,.jd-switch input[type=checkbox][role=switch]::before,dialog input[type=checkbox][role=switch]::before{content:'';position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(31,41,51,.25);transition:transform .2s}
+.jd-toggle:checked,.jd-switch input[type=checkbox][role=switch]:checked,dialog input[type=checkbox][role=switch]:checked{background:var(--teal)}
+.jd-toggle:checked::before,.jd-switch input[type=checkbox][role=switch]:checked::before,dialog input[type=checkbox][role=switch]:checked::before{transform:translateX(20px)}
+.jd-toggle:focus-visible,.jd-switch input[type=checkbox][role=switch]:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+
+/* Buttons in owned areas: blue primary pill, grey secondary pill */
+:where(.jd-more,.settings-panel,.members-panel,.school-panel,.photos-panel,dialog,.jd-pin-dialog) :is(.primary-button,.jd-btn.primary){min-height:48px;padding:0 22px;border:0;border-radius:999px;background:var(--teal);color:#fff;font-weight:800;font-size:1rem;cursor:pointer}
+:where(.jd-more,.settings-panel,.members-panel,.school-panel,.photos-panel,dialog,.jd-pin-dialog) :is(.outline-button,.jd-btn:not(.primary)){min-height:44px;padding:0 18px;border:0;border-radius:999px;background:var(--fill);color:var(--ink);font-weight:700;cursor:pointer}
+:where(.settings-panel,.members-panel,.photos-panel,dialog) .jd-btn.danger{background:var(--coral-tint);color:#b23f1b}
+:where(.jd-more,.settings-panel,.members-panel,.school-panel,.photos-panel,dialog) :is(button,.jd-btn):focus-visible{outline:none;box-shadow:var(--focus-ring)}
+:where(.jd-more,.settings-panel,.members-panel,.school-panel,.photos-panel) :is(.primary-button,.jd-btn,.outline-button):hover{filter:brightness(.97)}
+
+/* Panel heading (eyebrow-less, big title, back pill) */
+:is(.settings-panel,.members-panel,.school-panel,.photos-panel)>.card-heading{align-items:center;margin-bottom:18px;gap:16px}
+:is(.settings-panel,.members-panel,.school-panel,.photos-panel)>.card-heading .eyebrow{display:none}
+:is(.settings-panel,.members-panel,.school-panel,.photos-panel)>.card-heading h2{font-size:1.75rem;font-weight:800;margin:0}
+:is(.settings-panel,.members-panel,.school-panel,.photos-panel)>.card-heading .muted{margin:4px 0 0;font-size:.95rem}
+.app-shell :is(.settings-panel,.members-panel,.photos-panel,.rewards-panel,.meals-panel) .card-heading [data-back-to-more]{order:-1;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;background:var(--fill);color:var(--ink);font-weight:800;font-size:.9rem;text-decoration:none;white-space:nowrap}
+.app-shell .settings-panel .card-heading [data-back-to-more]{background:var(--paper)}
+.settings-panel>.card-heading,.members-panel>.card-heading,.photos-panel>.card-heading{justify-content:flex-start}
+.settings-panel>.card-heading>div,.members-panel>.card-heading>div,.photos-panel>.card-heading>div{order:1}
+
+/* ================= (1) Verwalten / More ================= */
+.app-shell .jd-more{display:flex;flex-direction:column;gap:6px;padding:8px 6px 24px;max-width:1180px;width:100%;margin:0 auto;overflow:auto;background:var(--paper)}
+.jd-more>.eyebrow,.jd-more>h2:not(.jd-more-title),.jd-more>.muted{display:none}
+.jd-more .jd-more-title{order:0;font-size:1.9rem;font-weight:800;margin:6px 0 4px}
+.jd-more .jd-more-profiles{order:1}
+.jd-more .tool-grid{order:2}
+.jd-more .jd-more-prefs{order:3}
+.jd-more>.language-row{order:3}
+.jd-more-section{font-size:1rem;font-weight:800;color:var(--ink);margin:18px 2px 10px;grid-column:1/-1}
+.jd-more-profile-list{list-style:none;margin:0;padding:2px 2px 6px;min-height:118px;display:flex;gap:18px;overflow-x:auto;scrollbar-width:none}
+.jd-more-profile{display:grid;justify-items:center;gap:8px;min-width:84px;padding:6px 4px;border:0;background:none;color:var(--ink);font:inherit;font-weight:700;cursor:pointer;border-radius:18px}
+.jd-more-profile:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.jd-more-avatar{display:grid;place-items:center;width:68px;height:68px;border-radius:50%;color:#fff;font-size:1.5rem;font-weight:800;background-size:cover;background-position:center;box-shadow:0 0 0 3px #fff,0 0 0 6px var(--ring,var(--line))}
+.jd-more-add .jd-more-avatar{background:var(--fill);color:var(--muted);box-shadow:inset 0 0 0 2px var(--line)}
+.jd-more-add .jd-more-avatar svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.jd-more-name{font-size:.9rem;max-width:110px;text-align:center;line-height:1.2;overflow-wrap:anywhere}
+
+.jd-more .tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin:0}
+.jd-more .tool-grid::before{content:none}
+.jd-more .tool-grid>.jd-tile{display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:18px;min-height:124px;padding:16px;border:0;border-radius:22px;background:var(--tone-bg,var(--p-grey));color:var(--ink);font:inherit;text-align:left;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.jd-more .tool-grid>.jd-tile:hover{transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.jd-more .tool-grid>.jd-tile:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.jd-more .jd-tile .jd-tile-ic{width:48px;height:48px;border-radius:16px;background:var(--paper);color:var(--tone-fg,#56606c)}
+.jd-more .jd-tile .jd-tile-ic svg{width:26px;height:26px}
+.jd-more .jd-tile-label{font-size:1rem;font-weight:800;line-height:1.2}
+.jd-more .tool-grid>[data-tool="Settings"]{order:1}
+.jd-more .tool-grid>[data-jd-proxy]{order:1}
+.jd-more .tool-grid>.jd-more-providers-head{order:5}
+.jd-more .tool-grid>.provider-grid{order:6}
+.jd-more .provider-grid{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin:0}
+.jd-more .provider-card{position:relative;display:grid;grid-template-columns:auto 1fr;column-gap:14px;row-gap:4px;align-items:center;padding:16px;border:0;border-radius:22px;background:var(--fill)}
+.jd-more .provider-card>.jd-tile-ic{grid-row:1/span 2;background:var(--paper)}
+.jd-more .provider-card>:not(.jd-tile-ic){grid-column:2}
+.jd-more .provider-card strong{font-size:1rem;font-weight:800}
+.jd-more .provider-card small{color:var(--muted);font-size:.82rem}
+.jd-more .provider-card .provider-status{display:inline-flex;align-items:center;min-height:26px;padding:0 10px;border-radius:999px;background:var(--paper);color:var(--muted);font-size:.72rem;letter-spacing:.04em}
+.jd-more .provider-actions{grid-column:1/-1!important;margin-top:8px}
+.jd-more .provider-actions:has(>.provider-status:only-child){margin-top:0}
+.jd-more .provider-actions button{min-height:44px;border:0;border-radius:999px;background:var(--paper);color:var(--ink);font-weight:800;padding:0 18px}
+.jd-more .provider-actions button[data-connect]{background:var(--teal);color:#fff}
+.jd-more .provider-connection{border:0;border-radius:16px;background:var(--paper);grid-column:1/-1!important}
+
+.jd-sheet{display:grid;background:var(--fill);border-radius:22px;padding:6px 16px}
+.jd-more .jd-row-item{display:flex;align-items:center;gap:14px;min-height:64px;margin:0;padding:8px 0}
+.jd-more .jd-row-item+.jd-row-item{border-top:1px solid var(--line)}
+.jd-more .jd-row-item label{flex:1;margin:0;color:var(--ink);font-size:1rem;font-weight:700}
+.jd-more .jd-row-item .jd-tile-ic{background:var(--paper);color:var(--tone-fg)}
+.jd-more .jd-row-item select{background-color:var(--paper);min-width:150px}
+
+/* ================= (2) Settings ================= */
+.app-shell .shell>.settings-panel{background:var(--fill);border-radius:26px;padding:22px clamp(14px,2vw,26px) 28px;margin-top:4px}
+.settings-panel .jd-settings-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr));gap:16px}
+.settings-panel .jd-card{border:0;border-radius:26px;background:var(--paper);box-shadow:none;padding:18px 20px;gap:10px}
+.settings-panel .jd-card>h3{display:flex;align-items:center;gap:12px;margin:0 0 4px;font-size:1.12rem;font-weight:800}
+.settings-panel .jd-field{gap:6px;color:var(--muted);font-weight:700;font-size:.85rem}
+.settings-panel .jd-switch{min-height:56px;padding:6px 0;border-top:1px solid var(--line);gap:16px}
+.settings-panel .jd-switch strong{font-weight:700;color:var(--ink)}
+.settings-panel .jd-switch small{color:var(--muted)!important}
+.settings-panel .jd-card>h3+.jd-switch,.settings-panel [data-child-lock]>.jd-switch:first-child{border-top:0}
+.settings-panel .jd-chip{background:var(--teal-tint);color:var(--teal-strong)}
+.settings-panel .jd-avatar{width:44px;height:44px;flex-basis:44px;box-shadow:0 0 0 2px #fff,0 0 0 4px var(--line)}
+.settings-panel .jd-avatars-host{gap:10px!important}
+.settings-panel .jd-actions{gap:8px}
+.settings-panel .jd-small{color:var(--muted)}
+.settings-panel .jd-lock-areas{border:0;background:var(--fill);border-radius:18px}
+
+/* ================= (3) Family / profile manager ================= */
+.app-shell .shell>.members-panel{max-width:1180px;width:100%;margin:0 auto}
+.members-panel .jd-profile-list{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin:0 0 20px;padding:0}
+.members-panel .jd-profile-list>li[data-profile]{display:grid;grid-template-columns:repeat(3,auto);justify-content:center;justify-items:center;align-items:center;gap:6px;padding:22px 14px 16px;border:0;border-radius:26px;background:color-mix(in srgb,var(--ring,var(--p-grey)) 18%,#fff)}
+.members-panel .jd-profile-list>li[data-profile]>:is(.jd-avatar,.jd-profile-name,small){grid-column:1/-1}
+.members-panel .jd-profile-list .jd-drag{display:none}
+.members-panel .jd-profile-list .jd-profile-move{display:inline-flex;gap:6px}
+.members-panel .jd-profile-list>li[data-profile]>:is(.jd-profile-move,.jd-icon-btn){margin-top:8px}
+.members-panel .jd-profile-list li>small{flex:0 0 auto!important;margin:0 auto}
+.members-panel .jd-profile-list .jd-avatar{width:92px;height:92px;flex-basis:92px;font-size:2rem;box-shadow:0 0 0 4px #fff,0 0 0 8px var(--ring,var(--line))}
+.members-panel .jd-profile-list .jd-profile-name{font-size:1.2rem;font-weight:800;margin-top:10px;flex:none}
+.members-panel .jd-profile-list li>small{padding:4px 12px;border-radius:999px;background:var(--paper);font-weight:700;color:var(--ink);font-size:.82rem}
+.member-list .jd-icon-btn{display:inline-grid;place-items:center;min-width:44px;min-height:44px;border:0;border-radius:50%;background:var(--paper);color:var(--ink);padding:0}
+.member-list .jd-icon-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.member-list .jd-icon-btn.danger{color:#b23f1b;background:transparent}
+.member-list .jd-icon-btn.danger:hover{background:var(--coral-tint)}
+.member-list .jd-icon-btn[aria-expanded=true]{background:var(--teal);color:#fff}
+.members-panel .jd-profile-list li.jd-profile-editor{grid-column:1/-1;display:grid;gap:18px;padding:22px;border:0;border-radius:26px;background:var(--fill)}
+.members-panel .jd-profile-editor .jd-field{color:var(--ink);font-weight:800;font-size:.95rem}
+.members-panel .jd-profile-editor input{background:var(--paper)!important}
+.members-panel .jd-rename{align-items:end}
+.members-panel .jd-swatches{gap:12px}
+.members-panel .jd-swatch{width:44px;height:44px;border:0;box-shadow:0 0 0 3px #fff inset;display:grid;place-items:center}
+.members-panel .jd-swatch.selected{box-shadow:0 0 0 3px #fff inset,0 0 0 3px var(--ink)}
+.members-panel .jd-photo-row .jd-avatar.large{width:80px;height:80px;flex-basis:80px}
+.members-panel .member-form{display:flex;gap:10px;align-items:center;padding:10px;border-radius:999px;background:var(--fill);max-width:720px}
+.members-panel .member-form input,.members-panel .member-form select{background-color:var(--paper)!important}
+.members-panel .member-form input{flex:1}
+.members-panel .member-form .primary-button{width:auto;white-space:nowrap}
+.members-panel .member-list:not(.jd-profile-list) li{border:0;border-radius:18px;background:var(--fill)}
+
+/* ================= (4) Today ================= */
+body.jd-view-today .app-shell .welcome{padding:8px 4px 4px;margin-bottom:10px}
+.app-shell .welcome .eyebrow{color:var(--coral);letter-spacing:.06em;font-weight:800}
+.app-shell .welcome h1{font-size:clamp(1.8rem,2.6vw,2.4rem);font-weight:800;margin:0 0 4px}
+.app-shell .today-grid{gap:16px}
+.app-shell .today-grid .card{border-radius:26px;padding:20px 22px;box-shadow:none}
+.app-shell .today-grid .focus-card{background:color-mix(in srgb,var(--p-sky) 55%,#fff)}
+.app-shell .today-grid .side-column{display:grid;gap:16px;align-content:start;min-height:0;overflow:auto}
+.app-shell .today-grid .side-column>.card:nth-child(1){background:color-mix(in srgb,var(--p-mint) 50%,#fff)}
+.app-shell .today-grid .side-column>.card:nth-child(2){background:color-mix(in srgb,var(--p-peach) 50%,#fff)}
+.app-shell .today-grid .side-column>.card:nth-child(n+3){background:color-mix(in srgb,var(--slot-dinner) 50%,#fff)}
+.app-shell .today-grid .card-heading .eyebrow{color:var(--muted);letter-spacing:.06em}
+.app-shell .today-grid .card-heading h2{font-size:1.35rem;font-weight:800;margin:0}
+.app-shell .today-grid .text-link{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:999px;background:var(--paper);color:var(--teal-strong);font-weight:800}
+.app-shell .today-grid .date-badge{background:var(--coral);color:#fff;border-radius:999px;padding:6px 12px}
+.app-shell .today-horizon{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:var(--paper);margin:0 0 16px}
+.app-shell .horizon-button{min-height:40px;border:0;background:transparent;color:var(--muted);border-radius:999px;padding:0 16px;font-weight:800}
+.app-shell .horizon-button[aria-pressed=true]{background:var(--teal-tint);color:var(--teal-strong)}
+.app-shell .timeline{gap:10px}
+.app-shell .timeline-item{grid-template-columns:62px 1fr;gap:12px;align-items:stretch}
+.app-shell .timeline-item time{align-self:center;font-weight:800;color:var(--ink);font-size:.95rem}
+.app-shell .timeline-item .dot{display:none}
+.app-shell .timeline-item>div:last-child{padding:12px 14px;border-radius:14px;background:var(--paper);border-left:4px solid var(--teal)}
+.app-shell .timeline-item strong{font-weight:800}
+.app-shell .timeline-day-separator{color:var(--coral);border-top-color:rgba(31,41,51,.08)}
+.app-shell .today-grid .today-owner-filter{min-height:44px;border:0;border-radius:999px;background:var(--paper);padding:0 16px;font-weight:700;margin-bottom:10px}
+
+/* ================= (5) School timetable ================= */
+.app-shell .shell>.school-panel{padding:8px 4px 24px;overflow:auto}
+.school-panel>.card-heading>.muted{display:inline-flex;align-items:center;min-height:36px;padding:0 14px;border-radius:999px;background:var(--teal-tint);color:var(--teal-strong);font-weight:800}
+.school-panel .school-form{grid-template-columns:repeat(5,minmax(0,1fr)) auto;gap:10px;padding:12px;border-radius:26px;background:var(--fill);align-items:end}
+.school-panel .school-form label{color:var(--muted);font-weight:700;font-size:.8rem;padding-left:6px}
+.app-shell .school-panel .school-form :is(input,select){background-color:var(--paper);min-height:46px}
+.school-panel .school-form .primary-button{grid-column:auto;align-self:end;white-space:nowrap}
+.school-panel .school-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:0;margin-top:18px;border-radius:20px;overflow:visible;flex:none;min-height:auto}
+.school-panel .school-form{flex:none}
+@media (max-width:1100px) and (min-width:761px){.school-panel .school-form{grid-template-columns:repeat(3,minmax(0,1fr))}.school-panel .school-form .primary-button{grid-column:auto}}
+.school-panel .school-day{align-content:start;gap:8px;min-height:340px;padding:0 6px 10px;border:0;border-left:1px solid var(--line);border-radius:0;background:var(--paper)}
+.school-panel .school-day:first-child{border-left:0}
+.school-panel .jd-day-head{display:block;padding:10px 4px;margin:0 -6px 4px;text-align:center;font-weight:800;color:var(--ink);border-bottom:1px solid var(--line)}
+.school-panel .school-day>.muted{padding:10px 6px;color:var(--muted);font-size:.85rem;text-align:center}
+.school-panel .school-day article{position:relative;gap:2px;padding:10px 12px 10px 12px;border:0;border-left:4px solid var(--c,var(--d-sky));border-radius:8px;background:color-mix(in srgb,var(--c,var(--d-sky)) 22%,#fff)}
+.school-panel .school-day article b{font-weight:800;font-size:.95rem;padding-right:22px}
+.school-panel .school-day article small{color:var(--muted);font-size:.78rem}
+.school-panel .school-day .school-child{display:none}
+.jd-lesson-badge{position:absolute;right:8px;top:8px;display:grid;place-items:center;width:20px;height:20px;border-radius:6px;background:var(--paper);color:var(--muted);font-size:.7rem;font-weight:800}
+.school-panel .school-day .inline-actions{display:flex;justify-content:flex-start;gap:6px;margin-top:4px}
+.school-panel .school-day .module-action{min-height:40px;padding:0 10px;font-size:.75rem!important;border:0;border-radius:999px;background:rgba(255,255,255,.75);color:var(--ink);font-weight:700;font-size:.8rem;cursor:pointer}
+
+/* ================= (6) Dialogs & sheets ================= */
+dialog{border:0;border-radius:26px;background:var(--paper);color:var(--ink);box-shadow:var(--shadow-lg);max-width:min(480px,calc(100vw - 24px))}
+dialog::backdrop{background:rgba(31,41,51,.4);backdrop-filter:blur(3px)}
+dialog :is(form,.wizard-form,.jd-pin-box){padding:30px 28px 26px}
+dialog h2{font-size:1.65rem;font-weight:800;letter-spacing:-.02em;line-height:1.15;margin:0 0 6px}
+dialog .eyebrow{color:var(--muted);font-weight:800;letter-spacing:.06em;margin-bottom:6px}
+dialog label{font-size:.9rem;font-weight:800;color:var(--ink);margin:16px 0 8px;padding-left:4px}
+dialog .close{position:absolute;top:16px;right:16px;display:grid;place-items:center;width:44px;height:44px;min-width:44px;border:0;border-radius:50%;background:var(--fill);color:var(--ink);font-size:1.4rem;line-height:1;cursor:pointer}
+dialog .capture-types{display:flex;flex-wrap:wrap;gap:4px;padding:4px;margin:16px 0 18px;border-radius:999px;background:var(--fill);width:max-content;max-width:100%}
+dialog .type{min-height:40px;padding:0 16px;border:0;border-radius:999px;background:transparent;color:var(--muted);font-weight:800;cursor:pointer}
+dialog .type.active{background:var(--paper);color:var(--teal-strong);box-shadow:var(--shadow-sm)}
+dialog .primary-button{width:100%;min-height:54px;font-size:1.17rem}
+dialog .inline-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+dialog .inline-actions .primary-button{flex:1 1 200px;width:auto}
+dialog .wizard-error{color:#b23f1b}
+dialog .muted{color:var(--muted)}
+#capture-form>.primary-button{margin-top:6px}
+/* Child lock keypad */
+.jd-pin-dialog{border-radius:26px;max-width:min(380px,calc(100vw - 24px))}
+.jd-pin-box{gap:14px;padding:30px 26px 26px}
+.jd-pin-box h2{font-size:1.5rem}
+.jd-pin-dots span{width:16px;height:16px;border:0;background:var(--fill-3)}
+.jd-pin-dots span.filled{background:var(--teal)}
+.jd-pin-pad{gap:12px}
+.jd-pin-pad button{min-height:66px;border:0;border-radius:50%;aspect-ratio:1;width:min(76px,100%);justify-self:center;background:var(--fill);font-size:1.6rem}
+.jd-pin-pad button:active{background:var(--teal-tint)}
+.jd-pin-pad button:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.jd-pin-msg{color:#b23f1b}
+
+/* ================= (6b) Photos manager ================= */
+.app-shell .shell>.photos-panel{max-width:1180px;width:100%;margin:0 auto}
+.photos-panel .jd-frame-toolbar{padding:12px 14px;border-radius:22px;background:var(--fill);align-items:center;gap:10px}
+.photos-panel .jd-frame-toolbar .jd-btn:not(.primary){background:var(--paper)}
+.photos-panel .jd-frame-grid{gap:12px;grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+.photos-panel .jd-frame-grid figure{border:0;border-radius:18px}
+.photos-panel .photo-form{padding:10px;border-radius:999px;background:var(--fill);align-items:center}
+.photos-panel .photo-form label{margin:0;font-size:0;color:transparent}
+.photos-panel .photo-form input{background:var(--paper)}
+.photos-panel .photo-grid article{border:0;border-radius:18px;background:var(--fill)}
+
+/* ================= (7) Picture / sleep mode ================= */
+.jd-frame{background:#000}
+.jd-frame-clock{left:clamp(16px,2.6vw,36px);top:clamp(14px,2.4vh,30px);bottom:auto;gap:0;padding:0;background:none;backdrop-filter:none;border-radius:0;text-shadow:0 1px 3px rgba(0,0,0,.55),0 0 18px rgba(0,0,0,.25)}
+.jd-frame-clock time{font-size:clamp(1.4rem,2.6vw,2.2rem);font-weight:800;letter-spacing:-.02em}
+.jd-frame-date{font-size:clamp(.85rem,1.2vw,1.05rem);font-weight:700;opacity:.95}
+.jd-frame-hint{right:clamp(16px,2.6vw,36px);bottom:clamp(14px,2.4vh,28px);padding:8px 14px;border-radius:999px;background:rgba(0,0,0,.28);backdrop-filter:blur(6px);font-weight:700;font-size:.82rem;opacity:.85;text-shadow:none}
+.jd-frame.sleep .jd-frame-clock{top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;opacity:.4;text-shadow:none}
+.jd-frame.sleep .jd-frame-clock time{font-size:clamp(3rem,9vw,7rem)}
+
+/* display.html */
+.shell.shared-display{max-width:1240px;padding:22px clamp(16px,3vw,40px)}
+.shared-display>.topbar{background:var(--paper);color:var(--ink);border:0;padding:0 0 10px;height:auto}
+.shared-display .brand{color:var(--ink);font-weight:800}
+.shared-display .status-pill{background:var(--teal-tint);color:var(--teal-strong);border-radius:999px;font-weight:800}
+.shared-display h1{font-weight:800}
+.shared-display .eyebrow{color:var(--coral)}
+.shared-display .display-controls{display:flex;flex-wrap:wrap;gap:8px}
+.shared-display .outline-button{min-height:44px;border:0;background:var(--fill);color:var(--ink);font-weight:800}
+.shared-display #picture-mode{background:var(--teal);color:#fff}
+.shared-display .today-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.shared-display .today-grid .card{border-radius:26px;padding:22px}
+.shared-display .today-grid .card:nth-child(1){background:var(--p-sky)}
+.shared-display .today-grid .card:nth-child(2){background:var(--p-mint)}
+.shared-display .today-grid .card:nth-child(3){background:var(--p-peach)}
+.shared-display .today-grid .card:nth-child(4){background:var(--p-lav)}
+.shared-display .today-grid .eyebrow{color:var(--muted)}
+.shared-display .today-grid .muted{color:var(--muted)}
+.shared-display .display-status{background:var(--ink);border-radius:999px;font-weight:700}
+.screensaver{place-items:start;background:#0d1117;padding:clamp(14px,2.4vh,30px) clamp(16px,2.6vw,36px)}
+.screensaver.has-photo{background-color:#000}
+.screensaver>div,.screensaver.has-photo>div{background:none!important;padding:0!important;border-radius:0;text-shadow:0 1px 3px rgba(0,0,0,.55)}
+.screensaver time{font-size:clamp(1.6rem,2.8vw,2.4rem)!important;letter-spacing:-.02em!important}
+.screensaver p{position:fixed;right:clamp(16px,2.6vw,36px);bottom:clamp(14px,2.4vh,28px);margin:0;padding:8px 14px;border-radius:999px;background:rgba(0,0,0,.3);font-size:.82rem;font-weight:700}
+
+/* ================= (8) Login & marketing ================= */
+body.jd-login{background:linear-gradient(160deg,#e2f6f6 0%,#FCFAF6 45%,#fff6dc 100%)}
+body.jd-login .login-card{max-width:420px;padding:34px 30px;border-radius:26px;background:var(--paper);box-shadow:var(--shadow-md)}
+body.jd-login .brand{display:inline-flex;align-items:center;gap:10px;color:var(--ink);font-weight:800;text-decoration:none}
+body.jd-login .login-card h1{font-size:2rem;font-weight:800;margin:18px 0 4px}
+body.jd-login .login-card label{font-size:.9rem;font-weight:800;margin:16px 0 8px;padding-left:4px}
+body.jd-login .login-card input{border:0;border-radius:999px;background:var(--fill);min-height:50px;padding:0 18px}
+body.jd-login .login-card input:focus-visible{outline:none;box-shadow:var(--focus-ring);background:var(--paper)}
+body.jd-login .login-card .primary-button{width:100%;min-height:54px;font-size:1.17rem;background:var(--teal);border-radius:999px}
+body.jd-login .login-error{color:#b23f1b}
+body:has(.marketing){background:var(--paper)}
+.shell.marketing{color:var(--ink)}
+.marketing h1,.marketing h2,.marketing h3{color:var(--ink);font-weight:800}
+.marketing h1{letter-spacing:-.035em}
+.marketing .eyebrow{color:var(--coral);letter-spacing:.08em}
+.marketing .marketing-nav .nav-login{border:0;background:var(--fill);color:var(--ink)}
+.marketing .primary-button{background:var(--teal);color:#fff;border-radius:999px;min-height:52px;padding:0 26px;font-weight:800;font-size:1.05rem}
+.marketing .outline-button{border:0;background:var(--fill);color:var(--ink);border-radius:999px;min-height:52px;padding:0 24px;font-weight:800}
+.marketing .marketing-actions .primary-button{width:auto}
+.marketing .hero-card{background:linear-gradient(150deg,#e2f6f6,#fff6dc);border-radius:30px;box-shadow:none;padding:26px}
+.marketing .hero-card .mini-screen{border-radius:22px;padding:18px;gap:8px}
+.marketing .mini-row{border:0;border-radius:12px;padding:12px 14px;border-left:4px solid var(--d-peach);background:var(--p-peach)}
+.marketing .mini-row:nth-child(3n){border-left-color:var(--d-mint);background:var(--p-mint)}
+.marketing .mini-row:nth-child(3n+1){border-left-color:var(--d-rose);background:var(--p-rose)}
+.marketing .trust-strip span{border:0;background:var(--teal-tint);color:var(--teal-strong);font-weight:800}
+.marketing .card{border:0;border-radius:26px;box-shadow:none;background:var(--fill)}
+.marketing .feature-card:nth-child(1){background:var(--p-rose)}
+.marketing .feature-card:nth-child(2){background:var(--p-mint)}
+.marketing .feature-card:nth-child(3){background:var(--p-sky)}
+.marketing .feature-card .eyebrow,.marketing .feature-card .muted{color:var(--muted)}
+.marketing .pricing-card.is-highlight{background:var(--teal-tint);box-shadow:inset 0 0 0 2px var(--teal)}
+.marketing .faq details{border:0;border-radius:18px;background:var(--fill)}
+.marketing .marketing-footer{border-top-color:var(--line)}
+
+/* ================= (9) Mobile ================= */
+@media (max-width:760px){
+  .app-shell .jd-more{padding:4px 2px 110px}
+  .jd-more .jd-more-title{font-size:1.6rem}
+  .jd-more .tool-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+  .jd-more .tool-grid>.jd-tile{min-height:108px;padding:12px;gap:12px;border-radius:20px}
+  .jd-more .jd-tile .jd-tile-ic{width:42px;height:42px;border-radius:14px}
+  .jd-more .jd-tile-label{font-size:.85rem;hyphens:auto;overflow-wrap:anywhere}
+  .jd-more .provider-grid{grid-template-columns:1fr}
+  .jd-more-avatar{width:58px;height:58px}
+  .jd-more-profile{min-width:70px}
+  .app-shell .shell>:is(.settings-panel,.members-panel,.school-panel,.photos-panel){padding-bottom:110px}
+  .app-shell .shell>.settings-panel{border-radius:22px;padding:16px 10px 110px}
+  :is(.settings-panel,.members-panel,.school-panel,.photos-panel)>.card-heading{flex-wrap:wrap}
+  :is(.settings-panel,.members-panel,.school-panel,.photos-panel)>.card-heading h2{font-size:1.4rem}
+  .settings-panel .jd-card{padding:16px}
+  .settings-panel .jd-row{grid-template-columns:1fr}
+  .members-panel .jd-profile-list{grid-template-columns:1fr;gap:10px}
+  .members-panel .jd-profile-list .jd-avatar{width:68px;height:68px;flex-basis:68px;font-size:1.5rem}
+  .members-panel .jd-profile-list>li[data-profile]{padding:20px 8px 10px}
+  .members-panel .member-form{flex-wrap:wrap;border-radius:26px}
+  .members-panel .member-form input{flex-basis:100%}
+  .members-panel .member-form .primary-button{flex:1}
+  .members-panel .jd-rename{flex-wrap:wrap}
+  .school-panel .school-form{grid-template-columns:1fr 1fr;border-radius:22px}
+  .school-panel .school-form .primary-button{grid-column:1/-1}
+  .school-panel .school-grid{grid-template-columns:1fr;border-radius:0;gap:10px}
+  .school-panel .school-day{min-height:0;border:0;border-radius:20px;background:var(--fill);padding:0 10px 10px}
+  .school-panel .jd-day-head{text-align:left;margin:0 -10px 4px;padding:12px 12px 8px;border-bottom:0}
+  body.jd-view-today .app-shell .shell{padding-bottom:110px;overflow:auto}
+  .app-shell .today-grid{grid-template-columns:1fr;grid-template-rows:none;overflow:visible;flex:none;min-height:auto}
+  .app-shell .today-grid .main-column,.app-shell .today-grid .side-column{min-height:auto;overflow:visible}
+  .app-shell .today-grid .main-column .card:not(.prompt),.app-shell .today-grid .side-column .card:not(.prompt){flex:none;min-height:auto}
+  .app-shell .today-grid .card{padding:16px}
+  dialog{width:calc(100vw - 16px);max-width:none;margin:auto auto 8px;border-radius:26px}
+  dialog :is(form,.wizard-form){padding:26px 20px 20px}
+  dialog h2{font-size:1.45rem;padding-right:44px}
+  dialog .capture-types{width:100%;flex-wrap:nowrap}
+  dialog .type{flex:1;padding:0 8px;font-size:.85rem}
+  .shell.shared-display{padding:16px}
+  .jd-frame-hint{left:16px;right:16px;text-align:center}
+}
+@media (prefers-reduced-motion:reduce){.jd-more .tool-grid>.jd-tile{transition:none}}
+.photos-panel .jd-frame-toolbar select{background-color:var(--paper)}
+.photos-panel .jd-frame-toolbar .jd-field{font-size:.8rem;font-weight:700;color:var(--muted)}
+.shared-display .display-controls a{text-decoration:none}
+.marketing h1{letter-spacing:-.04em}
+dialog .primary-button{margin-top:16px}
+.school-panel .school-day .inline-actions{justify-content:flex-start!important;margin-left:0!important}
+.school-panel .school-day .inline-actions .module-action{margin:0!important}
+
+/* CalDAV connect dialog */
+.jd-caldav-dialog{border:0;border-radius:var(--radius-xl,24px);padding:24px;box-shadow:var(--shadow-lg,0 18px 50px rgba(0,0,0,.3));width:min(440px,calc(100vw - 32px));background:var(--paper,#fff);color:var(--ink,#042F57)}
+.jd-caldav-dialog::backdrop{background:rgba(4,47,87,.55)}
+.jd-caldav-form{display:grid;gap:12px}.jd-caldav-form h3{margin:0}.jd-caldav-form .jd-actions{display:flex;gap:8px;justify-content:flex-end}
+.jd-caldav-error{margin:0;color:var(--coral,#d6384a);font-weight:600}
+.jd-caldav-dialog{max-height:calc(100vh - 32px);overflow:auto}.jd-caldav-form .jd-field{display:grid;gap:4px;margin:0}.jd-caldav-form .jd-actions{flex-direction:row;flex-wrap:wrap}.jd-caldav-form .jd-actions button{width:auto;flex:1 1 140px}
+
+/* iPad/iPhone home-screen app: draw the app under the system status area (viewport-fit=cover) and keep the header solid, so the system blur never lands on the logo */
+html{background:var(--paper)}
+.app-shell .topbar{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);height:calc(var(--topbar-h) + env(safe-area-inset-top,0px));flex:0 0 calc(var(--topbar-h) + env(safe-area-inset-top,0px));padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+@media (max-width:760px){.app-shell .topbar{padding-left:max(10px,env(safe-area-inset-left,0px));padding-right:max(10px,env(safe-area-inset-right,0px))}}

@@ -1,0 +1,204 @@
+/* meals-plus: week planner (7 days x 3 tinted slot rows), inline recipe box (tile grid + category chips), dialogs.
+   Look: docs/design.md "Essen". Tokens from public/css/theme.css only (--slot-*, --p-*, --d-*, --teal, --coral).
+   Slot colours are always paired with an icon/label in the gutter and in every aria-label (never colour alone). */
+:root{--mp-chip-bg:#f4f5f8;--mp-tile-radius:18px;--mp-touch:44px}
+
+.meals-panel.mp-panel{display:flex;flex-direction:column;gap:12px;flex:1;min-height:0;padding:6px 0 0;border:0;box-shadow:none;background:var(--paper);overflow:hidden}
+.mp-panel svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
+.mp-breakfast{--slot:var(--slot-breakfast);--slot-d:var(--d-peach)}
+.mp-lunch{--slot:var(--slot-lunch);--slot-d:var(--d-mint)}
+.mp-dinner{--slot:var(--slot-dinner);--slot-d:var(--d-lav)}
+
+/* ---------- Header: Meals | Recipes pills, KW pill with chevrons ---------- */
+.mp-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;flex:0 0 auto}
+.mp-seg{display:inline-flex;gap:4px}
+.mp-tab{display:inline-flex;align-items:center;gap:7px;min-height:var(--mp-touch);padding:0 16px;border:0;border-radius:999px;background:transparent;color:var(--muted);font:inherit;font-size:.92rem;font-weight:700;cursor:pointer}
+.mp-tab:hover{background:var(--mp-chip-bg);color:var(--ink)}
+.mp-tab[aria-pressed="true"]{background:var(--teal-tint);color:var(--teal)}
+.mp-weeknav{display:inline-flex;align-items:center;gap:4px}
+.mp-icon-btn,.mp-nav{display:grid;place-items:center;width:var(--mp-touch);height:var(--mp-touch);border:0;border-radius:50%;background:transparent;color:var(--muted);font:inherit;font-size:1.5rem;line-height:1;cursor:pointer}
+.mp-icon-btn{background:var(--mp-chip-bg);border-radius:14px}
+.mp-icon-btn[aria-current]{color:var(--teal)}
+.mp-icon-btn:hover,.mp-nav:hover{background:var(--fill-2);color:var(--ink)}
+.mp-kw{display:inline-flex;align-items:center;min-height:36px;padding:0 16px;border-radius:999px;background:var(--teal-tint);color:var(--teal);font-weight:800;font-size:.92rem;letter-spacing:.02em}
+.mp-head-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.mp-pill-btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:var(--mp-touch);padding:0 18px;border:0;border-radius:999px;background:var(--mp-chip-bg);color:var(--ink);font:inherit;font-size:.9rem;font-weight:700;cursor:pointer}
+.mp-pill-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mp-pill-btn:hover{background:var(--fill-2)}
+.mp-pill-btn.primary{background:var(--teal);color:#fff}
+.mp-pill-btn.primary:hover{background:var(--teal-strong)}
+.mp-pill-btn:disabled{opacity:.45;cursor:not-allowed}
+.mp-panel [data-back-to-more]{min-height:var(--mp-touch);padding:0 12px;border-radius:999px}
+@media (min-width:761px){.mp-panel [data-back-to-more]{display:none}}
+.mp-panel :is(button,input):focus-visible,.mp-dialog :is(button,input,textarea,select,label):focus-visible{outline:none;box-shadow:var(--focus-ring)}
+
+/* ---------- Week grid ---------- */
+.mp-scroll{flex:1;min-height:0;overflow:auto}
+.mp-week{display:grid;grid-template-columns:28px repeat(7,minmax(0,1fr));gap:10px;height:100%;min-height:420px}
+.mp-day,.mp-gutter{display:grid;grid-template-rows:36px repeat(3,minmax(92px,1fr));gap:10px;min-width:0;min-height:0}
+.mp-day-head{display:flex;align-items:center;justify-content:center}
+.mp-day-pill{display:inline-flex;align-items:center;gap:3px;min-height:28px;padding:0 14px;border-radius:999px;color:var(--muted);font-weight:700;font-size:.9rem;white-space:nowrap}
+.mp-day.is-today .mp-day-pill{background:var(--coral);color:#fff}
+.mp-gutter-cell{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--muted)}
+.mp-gutter-icon{font-size:1.05rem;line-height:1}
+.mp-gutter-label{writing-mode:vertical-rl;transform:rotate(180deg);font-size:.7rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+
+.mp-slot{position:relative;display:flex;flex-direction:column;min-width:0;min-height:0;padding:0;border:0;border-radius:var(--mp-tile-radius);background:color-mix(in srgb,var(--slot) 55%,#fff);color:var(--ink);font:inherit;text-align:center;cursor:pointer;overflow:hidden;container-type:size;transition:transform .12s,box-shadow .12s}
+.mp-slot:hover{box-shadow:0 4px 14px rgba(31,41,51,.10)}
+.mp-slot:active{transform:scale(.98)}
+.mp-slot.empty{background:color-mix(in srgb,var(--slot) 42%,#fff)}
+.mp-plus{margin:auto;color:var(--slot-d);opacity:.0;transition:opacity .15s}
+.mp-plus svg{width:26px;height:26px;stroke-width:2.4}
+.mp-slot.empty:hover .mp-plus,.mp-slot.empty:focus-visible .mp-plus{opacity:.9}
+@media (hover:none){.mp-plus{opacity:.45}}
+.mp-slot .mp-thumb{flex:1 1 auto;min-height:0;width:100%;display:grid;place-items:center;background:var(--slot);overflow:hidden}
+.mp-slot .mp-thumb .mp-photo{width:100%;height:100%;max-width:none;aspect-ratio:auto;object-fit:cover;border-radius:0}
+.mp-meal-name{flex:0 0 auto;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;padding:6px 8px 8px;font-size:clamp(.72rem,9cqmin,.9rem);font-weight:700;line-height:1.2;overflow-wrap:anywhere}
+.mp-slot.text-only{justify-content:center}
+.mp-slot.text-only .mp-meal-name{font-size:clamp(.78rem,11cqmin,1rem);-webkit-line-clamp:3}
+.mp-repeat{position:absolute;top:6px;right:6px;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.88);color:var(--teal)}
+.mp-repeat svg{width:16px;height:16px;stroke-width:2.2}
+
+/* Emoji thumbs: one big emoji, or up to four arranged in a cluster. */
+.mp-thumb{display:inline-flex;align-items:center;justify-content:center;line-height:1}
+.mp-thumb .mp-emojis{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0 .06em;max-width:2.4em;line-height:1.08;font-size:clamp(1.4rem,40cqmin,4.4rem)}
+.mp-thumb[data-count="2"] .mp-emojis{font-size:clamp(1.2rem,30cqmin,3.4rem);max-width:none;flex-wrap:nowrap}
+.mp-thumb[data-count="3"] .mp-emojis,.mp-thumb[data-count="4"] .mp-emojis{font-size:clamp(1rem,24cqmin,2.8rem)}
+.mp-thumb .mp-photo{width:100%;object-fit:cover;display:block}
+.mp-thumb:is([data-count="3"],[data-count="4"]) .mp-emojis{display:grid;grid-template-columns:repeat(2,auto);justify-content:center;max-width:none;gap:.04em .1em}
+.mp-thumb[data-count="3"] .mp-emojis>span:last-child{grid-column:1/-1;justify-self:center}
+
+/* ---------- Recipe box (inline view + picker dialog) ---------- */
+.mp-recipes-view{display:flex;flex-direction:column;gap:12px;flex:1;min-height:0}
+.mp-box-tools{display:flex;gap:8px}
+.mp-searchbox{flex:1;display:flex;align-items:center;gap:8px;min-height:var(--mp-touch);margin:0;padding:0 16px;border-radius:999px;background:var(--mp-chip-bg);color:var(--muted);font-weight:600}
+.mp-searchbox svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.mp-searchbox input{flex:1;min-width:0;width:auto;height:var(--mp-touch);padding:0;border:0;background:transparent;color:var(--ink);font:inherit;font-size:.95rem;outline:none}
+.mp-searchbox:focus-within{box-shadow:var(--focus-ring)}
+.mp-filter{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 4px;scrollbar-width:none}
+.mp-chip{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 16px;border:0;border-radius:999px;background:var(--mp-chip-bg);color:var(--ink);font:inherit;font-size:.88rem;font-weight:700;cursor:pointer}
+.mp-chip small{color:var(--muted);font-weight:700}
+.mp-chip[aria-pressed="true"]{background:var(--teal-tint);color:var(--teal)}
+.mp-chip[aria-pressed="true"] small{color:var(--teal)}
+.mp-recipe-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px 14px;align-content:start}
+.mp-recipe-card{position:relative;min-width:0}
+.mp-recipe-pick{display:flex;flex-direction:column;align-items:stretch;gap:4px;width:100%;padding:0;border:0;background:transparent;font:inherit;color:var(--ink);cursor:pointer;text-align:center}
+.mp-recipe-pick .mp-thumb{width:100%;aspect-ratio:1;border-radius:var(--mp-tile-radius);background:color-mix(in srgb,var(--p-peach) 60%,#fff);overflow:hidden;container-type:inline-size}
+.mp-recipe-card:nth-child(3n+2) .mp-thumb{background:color-mix(in srgb,var(--slot-lunch) 80%,#fff)}
+.mp-recipe-card:nth-child(3n) .mp-thumb{background:color-mix(in srgb,var(--slot-dinner) 80%,#fff)}
+.mp-recipe-pick .mp-thumb .mp-emojis{font-size:clamp(2rem,38cqw,4.6rem)}
+.mp-recipe-pick .mp-thumb[data-count="2"] .mp-emojis{font-size:clamp(1.6rem,28cqw,3.6rem)}
+.mp-recipe-pick .mp-thumb:is([data-count="3"],[data-count="4"]) .mp-emojis{font-size:clamp(1.4rem,24cqw,3rem)}
+.mp-recipe-pick .mp-photo{width:100%;height:100%;aspect-ratio:auto}
+.mp-recipe-pick:hover .mp-thumb{box-shadow:0 4px 14px rgba(31,41,51,.10)}
+.mp-recipe-pick:focus-visible{outline:none}
+.mp-recipe-pick:focus-visible .mp-thumb{box-shadow:var(--focus-ring)}
+.mp-recipe-name{margin-top:4px;font-weight:800;font-size:.95rem;overflow-wrap:anywhere}
+.mp-recipe-pick small{color:var(--muted);font-weight:600;font-size:.78rem}
+.mp-recipe-edit{position:absolute;top:6px;right:6px;display:grid;place-items:center;width:var(--mp-touch);height:var(--mp-touch);border:0;border-radius:50%;background:rgba(255,255,255,.9);color:var(--muted);cursor:pointer}
+.mp-recipe-edit svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mp-recipe-edit:hover{color:var(--teal)}
+.mp-empty{margin:0;padding:12px 0;grid-column:1/-1}
+
+/* ---------- Dialogs (white sheet, radius 26, grey pill fields) ---------- */
+.mp-dialog{max-width:680px;width:calc(100% - 24px);max-height:calc(100dvh - 32px);padding:0;border:0;border-radius:var(--radius-xl,26px);box-shadow:var(--shadow-lg)}
+.mp-dialog::backdrop{background:rgba(31,41,51,.4)}
+.mp-dialog svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mp-dialog-inner{display:flex;flex-direction:column;max-height:calc(100dvh - 32px)}
+.mp-dialog-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 22px 8px}
+.mp-dialog-head h2{margin:0;font-size:1.4rem;font-weight:800}
+.mp-close{flex:0 0 auto;width:var(--mp-touch);height:var(--mp-touch);border:0;border-radius:50%;background:var(--mp-chip-bg);color:var(--muted);font-size:1.4rem;cursor:pointer}
+.mp-dialog-body{display:grid;gap:14px;padding:8px 22px 22px;overflow-y:auto}
+.mp-dialog-actions{display:flex;flex-wrap:wrap;gap:8px}
+.mp-dialog .jd-btn{display:inline-flex;align-items:center;gap:6px;min-height:var(--mp-touch);padding:0 18px;border:0;border-radius:999px;background:var(--mp-chip-bg);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.mp-dialog .jd-btn.primary{background:var(--teal);color:#fff}
+.mp-dialog .jd-btn.danger{background:var(--coral-tint);color:var(--coral)}
+.mp-dialog .jd-btn:disabled{opacity:.45;cursor:not-allowed}
+.mp-dialog .jd-field{margin:0;font-weight:700;color:var(--ink)}
+.mp-dialog .jd-field>span{color:var(--ink)}
+.mp-dialog .jd-field input,.mp-dialog .jd-field textarea,.mp-dialog .jd-field select{border:0;border-radius:14px;background:var(--mp-chip-bg);padding:11px 14px;font-weight:500}
+.mp-target{margin:0;font-weight:700}
+.mp-meal-hero{display:flex;gap:16px;align-items:center}
+.mp-meal-hero h3{margin:0;font-size:1.35rem}
+.mp-meal-hero p{margin:0}
+.mp-meal-hero .mp-thumb.big{width:112px;height:112px;flex:0 0 112px;border-radius:var(--mp-tile-radius);background:color-mix(in srgb,var(--p-peach) 60%,#fff);overflow:hidden}
+.mp-thumb.big .mp-emojis{font-size:2.8rem;max-width:2.3em}
+.mp-thumb.big .mp-photo{width:100%;height:100%}
+.mp-servings{display:flex;align-items:center;gap:10px;font-weight:700}
+.mp-step{width:var(--mp-touch);height:var(--mp-touch);border:0;border-radius:50%;background:var(--teal-tint);color:var(--teal);font-size:1.2rem;font-weight:800;cursor:pointer}
+.mp-servings output{min-width:2ch;text-align:center;font-size:1.2rem}
+.mp-recipe-view h4{margin:0 0 4px}
+.mp-recipe-view ul{margin:0 0 8px;padding-left:20px}
+.mp-prep{white-space:pre-wrap}
+.mp-repeat-form{display:grid;gap:12px;padding:14px;border-radius:18px;background:var(--fill-soft)}
+.mp-repeat-form fieldset{border:0;margin:0;padding:0}
+.mp-repeat-form legend{font-weight:700;margin-bottom:6px}
+.mp-weekdays{display:flex;flex-wrap:wrap;gap:6px}
+.mp-wd-check{position:relative;margin:0}
+.mp-wd-check input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.mp-wd-check span{display:grid;place-items:center;min-width:48px;height:var(--mp-touch);padding:0 10px;border-radius:999px;background:var(--paper);font-weight:700}
+.mp-wd-check input:checked+span{background:var(--teal);color:#fff}
+.mp-wd-check input:focus-visible+span{box-shadow:var(--focus-ring)}
+.mp-dialog .mp-recipe-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px}
+.mp-quick{display:flex;gap:8px;align-items:end;padding-top:10px;border-top:1px solid var(--line)}
+.mp-quick .jd-field{flex:1}
+.mp-recipe-form{display:grid;gap:14px}
+.mp-recipe-form textarea{resize:vertical}
+.mp-emoji-row{display:flex;gap:8px;align-items:center}
+.mp-emoji-current{display:flex;gap:4px;min-height:var(--mp-touch);align-items:center}
+.mp-emoji-chip{width:var(--mp-touch);height:var(--mp-touch);border:0;border-radius:14px;background:color-mix(in srgb,var(--p-peach) 60%,#fff);font-size:1.5rem;cursor:pointer}
+.mp-emoji-input{flex:1;min-width:0}
+.mp-emoji-palette{display:flex;flex-wrap:wrap;gap:4px}
+.mp-emoji-palette button{width:var(--mp-touch);height:var(--mp-touch);border:0;border-radius:12px;background:var(--mp-chip-bg);font-size:1.3rem;cursor:pointer}
+.mp-photo-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.mp-photo-preview img{width:96px;height:72px;object-fit:cover;border-radius:12px;display:block}
+.mp-photo-pick{display:inline-flex;align-items:center;margin:0}
+.mp-cat-edit{display:flex;flex-wrap:wrap;gap:6px}
+.mp-cat-edit .jd-chip{min-height:40px;padding:0 14px;border:0;border-radius:999px;background:var(--mp-chip-bg);color:var(--ink);font:inherit;font-weight:700;font-size:.85rem;cursor:pointer}
+.mp-cat-edit .jd-chip[aria-pressed="true"]{background:var(--teal-tint);color:var(--teal)}
+.mp-cat-toggle{display:inline-flex;align-items:center}
+.mp-cat-del{width:32px;height:40px;border:0;background:transparent;color:var(--muted);cursor:pointer}
+.mp-cat-add{display:flex;gap:8px}
+.mp-cat-add input{flex:1;min-width:0}
+
+/* ---------- Today card ---------- */
+.mp-today-card{flex:0 0 auto}
+.mp-today-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px}
+.mp-today-list li{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 8px;border-radius:var(--mp-tile-radius);background:var(--slot);text-align:center}
+.mp-today-list .mp-thumb.small{width:44px;height:44px}
+.mp-today-list .mp-thumb.small .mp-emojis{font-size:1.6rem;max-width:2.3em}
+.mp-today-list .mp-thumb.small .mp-photo{width:44px;height:44px;border-radius:12px}
+.mp-today-list small{display:block;color:var(--muted);font-size:.72rem;font-weight:700}
+.mp-today-list strong{font-size:.85rem;overflow-wrap:anywhere}
+
+/* ---------- Phone: days as rows, three slot tiles per day ---------- */
+@media (max-width:760px){
+  .meals-panel.mp-panel{overflow:visible;flex:0 0 auto}
+  .mp-head{gap:8px}
+  .mp-tab{padding:0 12px}
+  .mp-head-right{margin-left:0;width:100%}
+  .mp-head-right .mp-pill-btn{flex:1}
+  .mp-scroll{overflow:visible;flex:0 0 auto}
+  .mp-week{grid-template-columns:1fr;height:auto;min-height:0;gap:8px}
+  .mp-day,.mp-gutter{grid-template-columns:48px repeat(3,minmax(0,1fr));grid-template-rows:auto;gap:8px}
+  .mp-gutter{position:sticky;top:0;z-index:1;background:var(--paper);padding:2px 0}
+  .mp-gutter-cell{flex-direction:row;gap:4px}
+  .mp-gutter-label{writing-mode:horizontal-tb;transform:none;font-size:.66rem}
+  .mp-day-head{flex-direction:column}
+  .mp-day-pill{flex-direction:column;gap:0;padding:6px 4px;min-width:44px;border-radius:14px;line-height:1.1;font-size:.82rem}
+  .mp-slot{aspect-ratio:1/1.05;min-height:0}
+  .mp-slot.empty{aspect-ratio:auto;min-height:56px}
+  .mp-week .mp-day:has(.mp-slot.filled) .mp-slot.empty{aspect-ratio:1/1.05}
+  .mp-recipe-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 10px}
+  .mp-recipe-name{font-size:.82rem}
+  .mp-recipe-edit{top:0;right:0;background:transparent}
+}
+@media (max-width:420px){.mp-tab span{font-size:.85rem}.mp-weeknav{margin-left:auto}.mp-icon-btn{display:none}}
+
+/* Who plans this meal? (coin reward) */
+.mp-planner{display:flex;flex-direction:column;gap:8px;margin:0 0 4px}
+.mp-planner-label{font-weight:700;font-size:.9rem}.mp-planner-label small{color:var(--muted);font-weight:700}
+.mp-planner-list{display:flex;gap:8px;flex-wrap:wrap}
+.mp-planner-chip{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px 0 6px;border:2px solid transparent;border-radius:999px;background:var(--mp-chip-bg,#f4f5f8);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.mp-planner-chip .jd-avatar{width:30px;height:30px;font-size:.85rem}
+.mp-planner-chip[aria-pressed="true"]{border-color:var(--teal);background:var(--teal-tint);color:var(--teal)}

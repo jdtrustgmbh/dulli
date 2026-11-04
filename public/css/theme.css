@@ -1,0 +1,101 @@
+/* JD Planning "Familienzentrale" theme (see docs/design.md).
+   Re-maps the base tokens so every existing module picks up the new look. Loaded after styles.css. */
+@font-face{font-family:'Nunito';font-style:normal;font-weight:200 1000;font-display:swap;src:url(/assets/fonts/Nunito-Variable.ttf) format('truetype')}
+:root{
+  --ink:#042F57;--muted:#5f6f80;--line:#e6eaee;--paper:#fff;--bg:#FCFAF6;--surface-muted:#f5f6f7;
+  --teal:#067f83;--teal-tint:#e2f6f6;--teal-strong:#046468;
+  --coral:#d9444f;--coral-tint:#ffedee;
+  --amber:#FFBC00;--amber-tint:#fff6dc;--amber-strong:#7a5200;
+  --violet:#8b83e0;--violet-tint:#eceafb;--green:#63C742;
+  --radius-sm:10px;--radius-md:14px;--radius-lg:20px;--radius-xl:26px;
+  --shadow-sm:0 1px 2px rgba(4,47,87,.06);--shadow-md:0 6px 20px rgba(4,47,87,.10);--shadow-lg:0 18px 50px rgba(4,47,87,.18);
+  --focus-ring:0 0 0 3px #9fe3e4;
+  /* pastel palette (events, columns, meal slots) */
+  --p-peach:#fde3c3;--p-rose:#f6c9cf;--p-mint:#cdebd6;--p-teal:#c4eeee;--p-lav:#d3d2f4;--p-sky:#d2e2f8;--p-sun:#fdf0bf;--p-grey:#e9ecf1;
+  --d-peach:#f0a95a;--d-rose:#e88a98;--d-mint:#63C742;--d-teal:#00A6A9;--d-lav:#8f8be0;--d-sky:#5b93e0;--d-sun:#FFBC00;--d-grey:#9aa4b2;
+  --slot-breakfast:#fbe5cc;--slot-lunch:#d4efd9;--slot-dinner:#d9dcf7;
+  --jd-morning:#f4b860;--jd-day:#5aa6c9;--jd-evening:#8f8be0;
+  --sidebar-w:78px;--topbar-h:64px;
+  font-family:'Nunito',ui-rounded,'Segoe UI',system-ui,sans-serif;
+}
+body{background:var(--paper);color:var(--ink)}
+h1,h2,h3{letter-spacing:-.02em;font-weight:800}
+button,input,select,textarea{font-family:inherit}
+.card{border:0;border-radius:var(--radius-lg);box-shadow:none;background:var(--paper)}
+.primary-button,.jd-btn.primary{background:var(--teal);color:#fff;border:0;border-radius:var(--radius-pill);font-weight:800}
+.outline-button{border:1.5px solid var(--line);background:var(--paper);color:var(--ink);border-radius:var(--radius-pill);font-weight:700}
+.eyebrow{color:var(--muted);letter-spacing:.08em}
+
+/* ---------- App shell: slim light sidebar + airy top bar ---------- */
+body:has(.app-shell) .app-shell{display:flex;flex-direction:row;height:100vh;height:100dvh;background:var(--paper)}
+.app-shell .tabs{order:0;flex:0 0 var(--sidebar-w);width:var(--sidebar-w);background:var(--fill);border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 0 10px;overflow:hidden}
+.app-shell .tabs a{width:64px;min-height:58px;padding:7px 2px 5px;border-radius:16px;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-decoration:none;font-size:.66rem;font-weight:700;background:transparent;transition:background .15s,color .15s}
+.app-shell .tabs a .tab-icon{display:grid;place-items:center;width:28px;height:28px;font-size:0}
+.app-shell .tabs a .tab-icon svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.app-shell .tabs a .tab-label{font-size:.66rem;line-height:1}
+.app-shell .tabs a:hover{background:var(--fill-2)}
+.app-shell .tabs a.active{background:var(--paper);color:#1f2933;box-shadow:var(--shadow-sm)}
+.app-shell .tabs a[href="#today"],.app-shell .tabs a[href="#more"]{display:none}
+.tabs-spacer{flex:1}
+.tabs-sync{width:44px;height:44px;border:0;border-radius:50%;background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer}
+.tabs-sync svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tabs-sync.spin svg{animation:jd-spin .8s linear}
+@keyframes jd-spin{to{transform:rotate(360deg)}}
+.tabs-fab{width:50px;height:50px;border:0;border-radius:50%;cursor:pointer;display:grid;place-items:center;color:#fff;font-size:30px;line-height:1;font-weight:300;background:var(--teal);box-shadow:0 4px 12px rgba(31,41,51,.22);margin-top:4px}
+.tabs-fab span{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.0);text-shadow:0 1px 2px rgba(0,0,0,.25)}
+.app-shell .app-main{order:1;flex:1;min-width:0;display:flex;flex-direction:column;background:var(--paper)}
+.app-shell .topbar{height:var(--topbar-h);flex:0 0 var(--topbar-h);background:var(--paper);color:var(--ink);padding:0 18px;border-bottom:0;gap:14px;justify-content:flex-start}
+.app-shell .topbar .brand{gap:12px;color:var(--ink)}
+.clock-title{font-size:1.18rem;font-weight:800;color:var(--ink);text-decoration:none;white-space:nowrap}
+.clock-title b{font-weight:800}.clock-title i{font-style:normal;color:#c3cad2;margin:0 .35em;font-weight:400}
+.app-shell .topbar .capture-button{display:none}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.topbar-icon{width:40px;height:40px;border-radius:50%;border:0;background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer}
+.topbar-icon:hover{background:var(--surface-muted)}
+.topbar-icon svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.topbar-group{width:52px;height:40px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--muted)}
+.app-shell .avatar-row{display:flex;gap:8px;align-items:center;margin:0}
+.app-shell .avatar-row .avatar-chip{width:42px;height:42px;border-radius:50%;border:3px solid var(--ring,#ccc);font-weight:800;color:#fff;box-shadow:0 0 0 2px #fff inset}
+.app-shell .shell{padding:4px 18px 14px;max-width:none}
+.app-shell .welcome,.app-shell .greeting-block{display:none}
+body.jd-view-today .app-shell .welcome,body.jd-view-today .app-shell .greeting-block{display:block}
+
+/* ---------- Mobile: bottom navigation + floating action button ---------- */
+@media (max-width:760px){
+  body:has(.app-shell) .app-shell{flex-direction:column-reverse}
+  .app-shell .tabs{flex:0 0 auto;width:100%;height:calc(62px + env(safe-area-inset-bottom,0px));flex-direction:row;justify-content:space-around;align-items:center;border-right:0;border-top:1px solid var(--line);padding:4px 6px calc(4px + env(safe-area-inset-bottom,0px));background:var(--paper)}
+  .app-shell .tabs a{width:auto;flex:1;min-height:54px}
+  .app-shell .tabs a[href="#school"],.app-shell .tabs a[href="#treasures"],.app-shell .tabs a[href="#meals"]{display:none}
+  .app-shell .tabs a[href="#more"]{display:flex}
+  .tabs-spacer,.tabs-sync{display:none}
+  .tabs-fab{position:fixed;right:18px;bottom:calc(78px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--teal);width:56px;height:56px}
+  .clock-title{font-size:1rem}
+  .app-shell .topbar{padding:0 10px;gap:8px}
+  .app-shell .topbar .clock-title{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;font-size:.95rem}
+  .app-shell .topbar .clock-title b:last-child{overflow:hidden;text-overflow:ellipsis}
+  .topbar-right{margin-left:auto;flex:0 0 auto;gap:4px}
+  .app-shell .avatar-row{gap:4px}
+  .app-shell .avatar-row .avatar-chip{flex:0 0 32px;width:32px;height:32px;min-width:32px;border-width:2.5px;font-size:.8rem}
+  .app-shell .topbar-icon{width:40px;min-width:40px}
+  .app-shell .shell{padding:0 10px 10px}
+}
+
+.app-shell .topbar .brand,.clock-title{min-height:44px;min-width:44px;display:inline-flex;align-items:center}
+
+/* ---------- Scrolling: Lists and Manage pages grow taller than the viewport ---------- */
+.app-shell .shell{overflow-y:auto;min-height:0}
+.app-main .shell>.card.jd-more,.app-main .shell>.card:has(.lists-plus){flex:none;overflow:visible}
+
+/* ---------- Calendar: header avatars double as the profile filter (shell.js) ---------- */
+body:has(.shell.shell-wide:not([hidden])) .cal-profiles{display:none}
+.app-shell .avatar-row .avatar-chip.is-off{opacity:.4;filter:grayscale(1)}
+body:has(.shell.shell-wide:not([hidden])) .app-shell .avatar-row .avatar-chip{cursor:pointer}
+
+@media (max-width:480px){.app-shell .topbar .brand-logo{display:none}.app-shell .topbar .brand-symbol{display:block}}
+
+/* Sync button: keeps spinning while a sync runs; result toast */
+.tabs-sync.spin svg{animation:jd-spin .8s linear infinite}
+.jd-toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom,0px));transform:translate(-50%,12px);max-width:calc(100vw - 32px);padding:12px 18px;border-radius:999px;background:var(--ink,#1f2933);color:#fff;font-weight:700;font-size:.92rem;box-shadow:0 8px 24px rgba(31,41,51,.28);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:60;text-align:center}
+.jd-toast.show{opacity:1;transform:translate(-50%,0)}
+@media (min-width:761px){.jd-toast{left:calc(var(--sidebar-w,78px) + 24px);bottom:24px;transform:translateY(12px)}.jd-toast.show{transform:translateY(0)}}
+@media (prefers-reduced-motion:reduce){.tabs-sync.spin svg{animation:none}.jd-toast{transition:none}}

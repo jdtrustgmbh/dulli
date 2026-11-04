@@ -1,0 +1,102 @@
+/* Dulli controls — buttons, inputs, forms, feedback, overlays. Spec: docs/design.md §7 and /styleguide */
+:root{
+  --lila:#7B61FF;--lila-tint:#eeeaff;
+  --fog-50:#f6f8fa;--fog-100:#eef2f6;--fog-200:#e2e8ee;--fog-300:#d3dce5;--fog-500:#8a9aaa;
+  --info:#2f80ed;--info-tint:#e5f1fd;--success:#2f9e44;--success-tint:#e7f6e4;--warn:#9a6b00;--warn-tint:#fff3d1;--danger:#c62b3a;--danger-tint:#ffe6e9;
+  --ctl-radius:12px;--ctl-height:46px;
+  --btn-primary:#042F57;--btn-primary-ink:#fff;--btn-primary-hover:#0d4577;
+  --fill:#f4f5f8;--fill-soft:#f7f8fa;--fill-2:#e9ecf3;--fill-3:#e3e7ec;
+  --ctl-ring:0 0 0 3px var(--paper),0 0 0 5px var(--brand-teal,#00A6A9);
+}
+
+/* ---- Buttons ---- */
+html body :is(.primary-button,.jd-btn.primary,.tb-new,.lp-add-btn,.mp-pill-btn.primary,.tr-submit,.week-quick-add button,.cal-editor .jd-btn.primary,.event-detail-body .jd-btn.primary,.mp-dialog .jd-btn.primary,.jd-task-actions .jd-btn.primary,.jd-more .provider-actions button[data-connect],.marketing .primary-button,body.jd-login .login-card .primary-button){
+  background:var(--btn-primary);color:var(--btn-primary-ink);border:0;border-radius:var(--ctl-radius);min-height:var(--ctl-height);font-weight:800;box-shadow:0 2px 6px rgba(4,47,87,.22);transition:background .15s,box-shadow .15s,transform .1s}
+html body :is(.primary-button,.jd-btn.primary,.tb-new,.lp-add-btn,.mp-pill-btn.primary,.tr-submit,.week-quick-add button):hover{background:var(--btn-primary-hover);filter:none}
+html body :is(.primary-button,.jd-btn.primary,.tb-new,.lp-add-btn,.mp-pill-btn.primary,.tr-submit):active{transform:translateY(1px)}
+html body :is(button,a,input,select,textarea,summary,[tabindex]):focus-visible{outline:none;box-shadow:var(--ctl-ring)}
+html body :is(.primary-button,.jd-btn.primary)[disabled],html body :is(.primary-button,.jd-btn.primary)[aria-disabled=true]{background:var(--fog-300);color:#fff;box-shadow:none;cursor:not-allowed}
+html body :is(.primary-button,.jd-btn)[aria-busy=true]{position:relative;color:transparent!important;pointer-events:none}
+html body :is(.primary-button,.jd-btn)[aria-busy=true]::after{content:"";position:absolute;inset:0;margin:auto;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:dl-spin .8s linear infinite}
+@keyframes dl-spin{to{transform:rotate(360deg)}}
+/* secondary: tinted teal */
+html body :is(.jd-btn:not(.primary):not(.danger),.pricing-card button.outline-button){background:var(--teal-tint);color:var(--ink);border:0;border-radius:var(--ctl-radius);min-height:var(--ctl-height);font-weight:800}
+html body :is(.jd-btn:not(.primary):not(.danger)):hover{background:#cdeeee}
+/* tertiary / ghost: white outline */
+html body :is(.outline-button,.marketing .outline-button,.shared-display .outline-button){background:var(--paper);color:var(--ink);border:1.5px solid var(--fog-300);border-radius:var(--ctl-radius);font-weight:700}
+html body .outline-button:hover{background:var(--fog-50)}
+/* destructive */
+html body :is(.jd-btn.danger,.danger-button){background:var(--danger-tint);color:var(--danger);border:0;border-radius:var(--ctl-radius);min-height:var(--ctl-height);font-weight:800}
+html body :is(.jd-btn.danger,.danger-button):hover{background:#ffd3d9}
+/* icon buttons + FAB */
+html body :is(.jd-icon-btn,.topbar-icon){border-radius:var(--ctl-radius)}
+html body .jd-icon-btn{background:var(--paper);border:1.5px solid var(--fog-200);color:var(--ink)}
+html body :is(.tabs-fab,.calendar-week-panel .cal-new,.tb-add-wide){background:var(--teal);color:#fff}
+
+/* ---- Text inputs ---- */
+html body :is(input,select,textarea):not(.jd-raw):not([type=checkbox]):not([type=radio]):not([type=color]):not([type=file]):not([type=range]){
+  min-height:var(--ctl-height);border:1.5px solid var(--fog-300);border-radius:10px;background-color:var(--paper);color:var(--ink);padding:0 14px;font:inherit;font-weight:600;box-shadow:none}
+html body textarea:not(.jd-raw){border-radius:12px;padding:12px 14px;min-height:96px}
+html body :is(input,select,textarea)::placeholder{color:var(--fog-500);font-weight:500}
+html body :is(input,select,textarea):not(.jd-raw):not([type=checkbox]):not([type=radio]):hover{border-color:var(--brand-teal,#00A6A9)}
+html body :is(input,select,textarea):not(.jd-raw):not([type=checkbox]):not([type=radio]):focus-visible{border-color:var(--brand-teal,#00A6A9);box-shadow:0 0 0 3px rgba(8,174,176,.25);background-color:var(--paper)}
+html body :is(input,select,textarea):not(.jd-raw):not([type=checkbox]):not([type=radio])[aria-invalid=true]{border-color:var(--danger);background-color:var(--paper)}
+html body :is(input,select,textarea):not(.jd-raw):not([type=checkbox]):not([type=radio])[aria-invalid=true]:focus-visible{box-shadow:0 0 0 3px rgba(198,43,58,.2)}
+.dl-error{color:var(--danger);font-size:.82rem;font-weight:700;margin:6px 2px 0}
+.dl-ok{border-color:var(--brand-green)!important}
+.dl-hint{color:var(--muted);font-size:.82rem;margin:6px 2px 0}
+
+/* ---- Selection controls ---- */
+input[type=checkbox],input[type=radio]{accent-color:var(--brand-teal,#00A6A9);width:20px;height:20px}
+html body .jd-switch input[type=checkbox][role=switch]:checked,html body .jd-toggle:checked,html body dialog input[type=checkbox][role=switch]:checked{background:var(--brand-green)}
+.dl-segmented{display:inline-flex;padding:3px;gap:2px;border-radius:12px;background:var(--fog-100)}
+.dl-segmented button{border:0;border-radius:9px;min-height:40px;padding:0 16px;background:transparent;color:var(--muted);font:inherit;font-weight:800;cursor:pointer}
+.dl-segmented button[aria-pressed=true],.dl-segmented button.active{background:var(--paper);color:var(--ink);box-shadow:var(--shadow-sm)}
+.dl-chip{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:0 12px;border-radius:999px;font-weight:800;font-size:.85rem;background:var(--teal-tint);color:#04565a}
+.dl-chip.sun{background:var(--jd-soft-gold,#fff6dc);color:#7a5200}.dl-chip.green{background:var(--success-tint);color:#1f6d2e}.dl-chip.coral{background:var(--coral-tint);color:#a3232f}.dl-chip.lila{background:var(--lila-tint);color:#4b36b8}
+.dl-chip button{border:0;background:transparent;color:inherit;cursor:pointer;font-size:1rem;line-height:1;padding:0 2px;min-height:24px;min-width:24px}
+.dl-pills{display:flex;flex-wrap:wrap;gap:8px}
+.dl-pills button{min-height:36px;padding:0 16px;border-radius:999px;border:1.5px solid var(--fog-300);background:var(--paper);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.dl-pills button[aria-pressed=true],.dl-pills button.active{background:var(--teal);border-color:var(--teal);color:#fff}
+.dl-stepper{display:inline-flex;align-items:center;border:1.5px solid var(--fog-300);border-radius:10px;overflow:hidden;background:var(--paper)}
+.dl-stepper button{width:44px;height:44px;border:0;background:var(--paper);color:var(--ink);font-size:1.2rem;cursor:pointer}
+.dl-stepper output{min-width:44px;text-align:center;font-weight:800}
+
+/* ---- Feedback ---- */
+.dl-alert{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;font-weight:700;font-size:.92rem;border:1px solid transparent}
+.dl-alert.info{background:var(--info-tint);color:#14498f;border-color:#c5defa}
+.dl-alert.success{background:var(--success-tint);color:#1f6d2e;border-color:#c7e8c0}
+.dl-alert.warn{background:var(--warn-tint);color:#6e4b00;border-color:#f6dc97}
+.dl-alert.error{background:var(--danger-tint);color:#8f1e2b;border-color:#f6c0c7}
+.dl-alert .dl-x{margin-left:auto;border:0;background:transparent;color:inherit;font-size:1.1rem;cursor:pointer;min-width:32px;min-height:32px}
+html body .jd-toast{background:var(--paper);color:var(--ink);border:1px solid var(--fog-200);border-left:5px solid var(--brand-green);border-radius:12px;box-shadow:0 10px 28px rgba(4,47,87,.18);text-align:left;font-weight:800}
+html body :is(.attention-banner,.marketing-error){border-radius:12px}
+.dl-progress{height:10px;border-radius:999px;background:var(--fog-100);overflow:hidden}
+.dl-progress>span{display:block;height:100%;border-radius:999px;background:var(--brand-green)}
+.dl-tip{display:inline-block;padding:8px 12px;border-radius:10px;background:var(--ink);color:#fff;font-size:.82rem;font-weight:700}
+.dl-empty{display:grid;justify-items:center;gap:8px;text-align:center;padding:28px 20px;border-radius:16px;background:var(--paper);border:1.5px dashed var(--fog-300)}
+.dl-empty strong{font-size:1.05rem}.dl-empty .muted{max-width:28ch}
+
+/* ---- Cards ---- */
+.dl-card{background:var(--paper);border:1px solid var(--fog-200);border-radius:16px;box-shadow:var(--shadow-sm);padding:14px 16px}
+.dl-card.reminder{background:var(--warn-tint);border-color:#f6dc97}
+.dl-avatars{display:flex;gap:10px;align-items:center}
+.dl-avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff;border:3px solid #fff;box-shadow:0 0 0 2px var(--fog-200)}
+
+/* ---- Navigation ---- */
+html body .app-shell .tabs a.active{background:var(--teal-tint);color:var(--ink)}
+.dl-tabs{display:flex;gap:18px;border-bottom:1.5px solid var(--fog-200)}
+.dl-tabs a{padding:10px 2px;color:var(--muted);font-weight:800;text-decoration:none;border-bottom:3px solid transparent;margin-bottom:-1.5px}
+.dl-tabs a[aria-current=page]{color:var(--ink);border-bottom-color:var(--brand-teal,#00A6A9)}
+
+/* ---- Overlays ---- */
+html body dialog{border-radius:18px;box-shadow:0 24px 60px rgba(4,47,87,.28)}
+html body dialog::backdrop{background:rgba(4,47,87,.45)}
+html body dialog .close{border-radius:10px;background:transparent}
+.dl-menu{display:grid;min-width:200px;padding:6px;border-radius:14px;background:var(--paper);border:1px solid var(--fog-200);box-shadow:0 14px 34px rgba(4,47,87,.18)}
+.dl-menu button{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 12px;border:0;border-radius:9px;background:transparent;color:var(--ink);font:inherit;font-weight:700;text-align:left;cursor:pointer}
+.dl-menu button:hover{background:var(--fog-100)}.dl-menu button.danger{color:var(--danger)}
+.dl-day{width:36px;height:36px;border-radius:50%;display:inline-grid;place-items:center;font-weight:700}
+.dl-day[aria-selected=true]{background:var(--brand-green);color:#fff}
+
+@media (prefers-reduced-motion:reduce){html body :is(.primary-button,.jd-btn)[aria-busy=true]::after{animation:none}}

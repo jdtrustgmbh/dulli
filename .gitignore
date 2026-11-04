@@ -1,0 +1,7 @@
+node_modules/
+*.png
+playwright-report/
+
+# brand assets are tracked
+!public/assets/brand/*.png
+!branding/**/*.png

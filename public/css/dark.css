@@ -1,0 +1,57 @@
+/* Dulli night mode. Active when <html data-theme="dark"> (set by the inline script in every page head, see window.jdTheme). */
+html[data-theme="dark"]{
+  color-scheme:dark;
+  --ink:#e9f1f8;--muted:#9fb1c3;--line:#26394e;--paper:#132235;--bg:#0b1622;
+  --fill:#1b2e44;--fill-soft:#162a3f;--fill-2:#223850;--fill-3:#2b4562;
+  --surface-muted:#10202f;
+  --teal:#0e9fa2;--teal-strong:#0b8487;--teal-tint:#12363f;
+  --coral:#ff6b78;--coral-tint:#3b1e28;
+  --amber:#FFBC00;--amber-tint:#3a2f10;--amber-strong:#ffcf4d;
+  --violet:#a395e8;--violet-tint:#272347;
+  --green:#63C742;
+  --focus-ring:0 0 0 3px rgba(0,166,169,.45);
+  --shadow-sm:0 1px 2px rgba(0,0,0,.4);--shadow-md:0 6px 20px rgba(0,0,0,.45);--shadow-lg:0 18px 50px rgba(0,0,0,.6);
+  /* pastel palette (events, columns, meal slots) */
+  --p-peach:#4d3a22;--p-rose:#4b2a31;--p-mint:#1f4130;--p-teal:#17434a;--p-lav:#2f2c57;--p-sky:#213f5f;--p-sun:#4b4115;--p-grey:#2b3a4b;
+  --slot-breakfast:#4d3a22;--slot-lunch:#1f4130;--slot-dinner:#2f2c57;
+  --cal-chip:#1b2e44;--cal-grid:#1f3249;--cal-soft-ink:#9fb1c3;--lp-tile:#1b2e44;--lp-tile-strong:#223850;--lp-chip-bg:#1b2e44;--mp-chip-bg:#1b2e44;
+  --tb-gold-tint:#3a2f10;
+  --jd-soft-teal:#12363f;--jd-soft-coral:#3b1e28;--jd-soft-gold:#3a2f10;
+  --fog-50:#162a3f;--fog-100:#1b2e44;--fog-200:#26394e;--fog-300:#35506b;--fog-500:#7f93a8;
+  --info-tint:#12304f;--success-tint:#17331f;--warn-tint:#3a2f10;--danger-tint:#3b1e28;--lila-tint:#272347;
+  --btn-primary:#00A6A9;--btn-primary-ink:#04223d;--btn-primary-hover:#19bcbf;
+}
+html[data-theme="dark"] body{background:var(--bg);color:var(--ink)}
+html[data-theme="dark"] .topbar,html[data-theme="dark"] .app-shell .topbar{background:var(--paper);color:var(--ink)}
+html[data-theme="dark"] .tabs,html[data-theme="dark"] .app-shell .tabs,html[data-theme="dark"] .app-sidebar{background:var(--surface-muted)}
+html[data-theme="dark"] .app-shell .tabs a.active{background:var(--teal-tint);color:var(--ink)}
+html[data-theme="dark"] dialog{background:var(--paper);color:var(--ink)}
+html[data-theme="dark"] dialog::backdrop{background:rgba(0,0,0,.6)}
+html[data-theme="dark"] .jd-toast{background:var(--paper);color:var(--ink);border-color:var(--line)}
+html[data-theme="dark"] .jd-combo-list,html[data-theme="dark"] .dl-menu{background:var(--paper)}
+html[data-theme="dark"] :is(input,select,textarea)::placeholder{color:var(--fog-500)}
+html[data-theme="dark"] select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239fb1c3' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;background-size:16px}
+html[data-theme="dark"] .dl-alert.info{color:#9ccbff;border-color:#244a73}
+html[data-theme="dark"] .dl-alert.success{color:#9fe3a8;border-color:#27502e}
+html[data-theme="dark"] .dl-alert.warn{color:#ffd77a;border-color:#5b4915}
+html[data-theme="dark"] .dl-alert.error{color:#ffa3ad;border-color:#6a2a35}
+html[data-theme="dark"] .dl-chip{color:#8fe3e5}html[data-theme="dark"] .dl-chip.sun{color:#ffd77a}
+html[data-theme="dark"] :is(.jd-btn.danger,.danger-button){color:#ff9aa5}
+html[data-theme="dark"] :is(.jd-btn:not(.primary):not(.danger)){color:var(--ink)}
+html[data-theme="dark"] :is(.jd-btn:not(.primary):not(.danger)):hover{background:#1c4650}
+html[data-theme="dark"] :is(.primary-button,.jd-btn.primary)[disabled]{background:var(--fill-3);color:var(--muted)}
+html[data-theme="dark"] .dl-tip{background:#e9f1f8;color:#042F57}
+html[data-theme="dark"] .dl-day[aria-selected=true]{color:#04223d}
+/* logos: the dark variants carry a white wordmark */
+.brand-logo--dark{display:none}
+html[data-theme="dark"] .brand-logo:not(.brand-logo--dark){display:none}
+html[data-theme="dark"] .brand-logo--dark{display:block}
+html[data-theme="dark"] .brand-symbol{background:transparent}
+@media (max-width:480px){html[data-theme="dark"] .app-shell .topbar .brand-logo--dark{display:none}html[data-theme="dark"] .app-shell .topbar .brand-symbol{display:block}}
+/* backgrounds on the public pages */
+html[data-theme="dark"] body.jd-login{background:linear-gradient(160deg,#0f2c36 0%,#0b1622 50%,#2a2410 100%)}
+html[data-theme="dark"] .marketing .hero-card{background:linear-gradient(150deg,#12363f,#2a2410)}
+html[data-theme="dark"] .marketing .primary-button,html[data-theme="dark"] body.jd-login .login-card .primary-button{background:var(--btn-primary);color:var(--btn-primary-ink)}
+html[data-theme="dark"] .legal-lang{background:var(--fill)}
+html[data-theme="dark"] .legal-lang button[aria-pressed="true"]{background:var(--paper)}
+html[data-theme="dark"] img.emoji,html[data-theme="dark"] .tb-emoji{filter:none}

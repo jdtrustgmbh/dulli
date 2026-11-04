@@ -1,0 +1,19 @@
+/* Dulli style guide tokens (see docs/design.md). Extends the base tokens in styles.css. */
+:root{
+  --jd-gold:#FFBC00;--jd-silver:#9aa7ad;--jd-bronze:#b8763a;
+  --jd-soft-teal:#e2f6f6;--jd-soft-coral:#ffedee;--jd-soft-gold:#fff6dc;
+  --jd-shadow-1:0 1px 2px rgba(4,47,87,.08),0 4px 12px rgba(4,47,87,.06);
+  --jd-shadow-2:0 8px 28px rgba(4,47,87,.16);
+  --jd-chip-radius:999px;--jd-touch:44px;
+  --jd-morning:#f4b860;--jd-day:#5aa6c9;--jd-evening:#7a6fc4;
+}
+.jd-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-lg,16px);box-shadow:var(--jd-shadow-1);padding:var(--space-4,16px)}
+.jd-btn{min-height:var(--jd-touch);padding:0 var(--space-4,16px);border-radius:var(--jd-chip-radius);border:1px solid var(--teal);background:var(--paper);color:var(--teal);font-weight:700;cursor:pointer}
+.jd-btn.primary{background:var(--teal);color:#fff}
+.jd-btn.danger{border-color:var(--coral);color:var(--coral)}
+.jd-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:var(--jd-chip-radius);background:var(--jd-soft-teal);font-size:.8rem;font-weight:700}
+.jd-field{display:grid;gap:6px;font-size:var(--text-sm,.875rem);color:var(--muted)}
+.jd-field input,.jd-field select,.jd-field textarea{min-height:var(--jd-touch);border:1px solid var(--line);border-radius:var(--radius-md,10px);padding:var(--space-2,8px);background:var(--paper);color:var(--ink);font:inherit}
+.jd-switch{display:flex;align-items:center;justify-content:space-between;gap:var(--space-3,12px);min-height:var(--jd-touch)}
+.jd-switch input{width:44px;height:24px;accent-color:var(--teal)}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}

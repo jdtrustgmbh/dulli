@@ -1,0 +1,55 @@
+# Dulli - self-hosting setup with two containers: the app and PostgreSQL.
+#
+#   cp .env.example .env      # then edit .env (at least POSTGRES_PASSWORD and BOOTSTRAP_PASSWORD)
+#   docker compose up -d --build
+#
+# The app listens on http://localhost:${DULLI_PORT:-3000}. See docs/self-hosting.md.
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "${DULLI_PORT:-3000}:3000"
+    environment:
+      PORT: "3000"
+      STATE_FILE: /app/data/state.json
+      DATABASE_URL: postgresql://${POSTGRES_USER:-dulli}:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@postgres:5432/${POSTGRES_DB:-dulli}
+      # First login (only used while no account exists yet). Leave BOOTSTRAP_PASSWORD empty to get a random one in the app log.
+      BOOTSTRAP_EMAIL: ${BOOTSTRAP_EMAIL:-admin@example.com}
+      BOOTSTRAP_PASSWORD: ${BOOTSTRAP_PASSWORD:-}
+      # Encrypts calendar credentials at rest. If empty, a random key is generated into the data volume.
+      CREDENTIALS_KEY: ${CREDENTIALS_KEY:-}
+      PUBLIC_HOST: ${PUBLIC_HOST:-}
+      # Optional: Google Calendar connection
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      GOOGLE_REDIRECT_URI: ${GOOGLE_REDIRECT_URI:-}
+    volumes:
+      - dulli-data:/app/data
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-dulli}
+      POSTGRES_USER: ${POSTGRES_USER:-dulli}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - dulli-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  dulli-data:
+  dulli-postgres:

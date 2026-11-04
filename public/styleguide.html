@@ -1,0 +1,74 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#00A6A9"><title>Dulli · Styleguide</title><meta name="robots" content="noindex"><link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/svg+xml" href="/assets/brand/favicon-auto.svg"><link rel="apple-touch-icon" sizes="180x180" href="/assets/brand/apple-touch-icon.png"><link rel="apple-touch-icon" sizes="167x167" href="/assets/brand/apple-touch-icon-167.png"><link rel="apple-touch-icon" sizes="152x152" href="/assets/brand/apple-touch-icon-152.png"><link rel="apple-touch-icon" sizes="120x120" href="/assets/brand/apple-touch-icon-120.png"><meta name="apple-mobile-web-app-title" content="Dulli"><script>(function(){var d=document.documentElement,k='jd-theme';function g(){try{return localStorage.getItem(k)==='dark'?'dark':'light'}catch(e){return 'light'}}function a(){var t=g();if(t==='dark')d.setAttribute('data-theme','dark');else d.removeAttribute('data-theme');if(t==='dark'&&!document.getElementById('jd-dark-pre')){var s=document.createElement('style');s.id='jd-dark-pre';s.textContent='html[data-theme=dark],html[data-theme=dark] body{background:#0b1622;color-scheme:dark}';document.head.appendChild(s)}var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='dark'?'#0b1622':'#00A6A9')}window.jdTheme={get:g,apply:a,set:function(t){try{if(t==='dark')localStorage.setItem(k,'dark');else localStorage.removeItem(k)}catch(e){}a()}};a()})()</script><link rel="stylesheet" href="/css/brand.css"><link rel="stylesheet" href="/css/base.css"><link rel="stylesheet" href="/css/theme.css"><link rel="stylesheet" href="/features/theme-extras.css"><link rel="stylesheet" href="/css/controls.css"><link rel="stylesheet" href="/css/dark.css"><style>
+html,body{height:auto;overflow:auto!important}body{background:var(--bg)}
+.sg{max-width:1180px;margin:0 auto;padding:24px 20px 80px}
+.sg h1{font-size:2rem;margin:0}.sg h2{font-size:1.2rem;margin:0 0 14px}.sg h3{font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px}
+.sg-top{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:24px}
+.sg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px}
+.sg-panel{background:#fff;border:1px solid var(--fog-200);border-radius:20px;padding:20px;box-shadow:var(--shadow-sm)}
+.sg-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.sg-sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.sg-sw div{border-radius:14px;padding:44px 10px 10px;font-weight:800;font-size:.82rem;color:#fff;line-height:1.3}
+.sg-sw small{display:block;font-weight:600;opacity:.9}
+.sg label{display:block;font-weight:800;font-size:.85rem;margin:12px 0 6px}
+.sg-stack{display:grid;gap:10px}
+.sg .primary-button,.sg .jd-btn,.sg .outline-button{width:auto;padding:0 20px;font-size:1rem}.sg .jd-icon-btn{width:44px;height:44px;padding:0;display:inline-grid;place-items:center;font-size:1.1rem}.sg-modal{max-width:340px}
+.sg-phone{width:260px;border:8px solid var(--ink);border-radius:30px;background:var(--bg);padding:16px 14px;display:grid;gap:10px}
+</style></head><body><main class="sg">
+<div class="sg-top"><a class="brand" href="/" aria-label="Dulli"><img class="brand-logo" src="/assets/brand/dulli-logo-horizontal-light.svg" alt="" width="122" height="56"><img class="brand-logo brand-logo--dark" src="/assets/brand/dulli-logo-horizontal-dark.svg" alt="" width="122" height="56"></a><div><h1>Bedien- &amp; Eingabeelemente</h1><p class="muted" style="margin:4px 0 0">Live-Referenz des Dulli-Designsystems. Regeln: <code>docs/design.md</code></p></div></div>
+
+<div class="sg-grid">
+<section class="sg-panel" style="grid-column:1/-1"><h2>Farbwelt</h2><div class="sg-sw">
+<div style="background:#042F57">Navy<small>#042F57 · --ink</small></div>
+<div style="background:#00A6A9">Türkis<small>#00A6A9 · Marke</small></div>
+<div style="background:#067F83">Türkis Aktion<small>#067F83 · --teal</small></div>
+<div style="background:#FE4758">Koralle<small>#FE4758 · Marke</small></div>
+<div style="background:#FFBC00;color:#042F57">Gelb<small>#FFBC00</small></div>
+<div style="background:#63C742;color:#042F57">Grün<small>#63C742</small></div>
+<div style="background:#7B61FF">Lila<small>#7B61FF · --lila</small></div>
+<div style="background:#eef2f6;color:#042F57">Nebel<small>#EEF2F6 · --fog-100</small></div>
+<div style="background:#d3dce5;color:#042F57">Nebel dunkel<small>#D3DCE5 · --fog-300</small></div>
+</div></section>
+
+<section class="sg-panel"><h2>Buttons</h2>
+<h3>Typen</h3><div class="sg-row"><button class="primary-button">✓ Speichern</button><button class="jd-btn">🗓 Kalender</button><button class="outline-button">Abbrechen</button><button class="jd-btn danger">🗑 Löschen</button></div>
+<h3>Zustände</h3><div class="sg-row"><button class="primary-button">Standard</button><button class="primary-button" style="background:#0d4577">Hover</button><button class="primary-button" style="box-shadow:0 0 0 3px #fff,0 0 0 5px #00A6A9">Fokus</button><button class="primary-button" disabled>Deaktiviert</button><button class="primary-button" aria-busy="true" style="min-width:110px">Lädt</button></div>
+<h3>Icon &amp; FAB</h3><div class="sg-row"><button class="jd-icon-btn" aria-label="Hinzufügen">＋</button><button class="jd-icon-btn" aria-label="Bearbeiten">✎</button><button class="jd-icon-btn" aria-label="Löschen">🗑</button><button class="tabs-fab" aria-label="Neu" style="display:grid"><span>＋</span></button></div></section>
+
+<section class="sg-panel"><h2>Texteingaben</h2>
+<label for="sg1">Standard</label><input id="sg1" placeholder="z. B. Familienausflug">
+<label for="sg2">Ausgefüllt</label><input id="sg2" class="dl-ok" value="max@dulli.de">
+<label for="sg3">Fehler</label><input id="sg3" aria-invalid="true" value="max@"><p class="dl-error">Bitte eine gültige E-Mail-Adresse eingeben.</p>
+<label for="sg4">Passwort</label><input id="sg4" type="password" value="geheim1234">
+<label for="sg5">Suche</label><input id="sg5" type="search" placeholder="Suche (z. B. Aufgabe, Termin)"></section>
+
+<section class="sg-panel"><h2>Formularelemente</h2>
+<label for="sg6">Textbereich</label><textarea id="sg6" placeholder="Notizen zum Ausflug …"></textarea>
+<label for="sg7">Auswahl</label><select id="sg7"><option>Kategorie wählen</option><option>Schule</option><option>Einkauf</option></select>
+<label for="sg8">Datum</label><input id="sg8" type="date" value="2026-03-18">
+<h3>Segmentiert</h3><div class="dl-segmented"><button aria-pressed="true">Tag</button><button>Woche</button><button>Monat</button></div>
+<h3>Auswahl</h3><div class="sg-stack"><label style="margin:0;display:flex;gap:10px;align-items:center"><input type="checkbox" checked> Aufgabe erledigt</label><label style="margin:0;display:flex;gap:10px;align-items:center"><input type="radio" name="sgr" checked> Privat</label><label style="margin:0;display:flex;gap:10px;align-items:center"><input type="radio" name="sgr"> Familie</label></div>
+<h3>Stepper &amp; Chips</h3><div class="sg-row"><div class="dl-stepper"><button aria-label="Weniger">−</button><output>2</output><button aria-label="Mehr">＋</button></div></div><div class="sg-row" style="margin-top:10px"><span class="dl-chip">Ausflug <button aria-label="Entfernen">×</button></span><span class="dl-chip sun">Schule <button aria-label="Entfernen">×</button></span><span class="dl-chip green">Einkauf <button aria-label="Entfernen">×</button></span><span class="dl-chip lila">Sport</span></div></section>
+
+<section class="sg-panel"><h2>Navigation</h2>
+<h3>Obere Tabs</h3><div class="dl-tabs"><a href="#" aria-current="page">Kalender</a><a href="#">Aufgaben</a><a href="#">Familie</a><a href="#">Einkaufsliste</a></div>
+<h3>Pill-Filter</h3><div class="dl-pills"><button aria-pressed="true">Alle</button><button>Offen</button><button>Erledigt</button><button>Heute</button></div></section>
+
+<section class="sg-panel"><h2>Feedback &amp; Status</h2><div class="sg-stack">
+<div class="dl-alert info">ℹ Info: Änderungen werden automatisch gespeichert.<button class="dl-x" aria-label="Schließen">×</button></div>
+<div class="dl-alert success">✓ Erfolgreich: Aufgabe wurde erledigt.<button class="dl-x" aria-label="Schließen">×</button></div>
+<div class="dl-alert warn">⚠ Hinweis: Der Termin überschneidet sich.<button class="dl-x" aria-label="Schließen">×</button></div>
+<div class="dl-alert error">⛔ Fehler: Die Eingabe ist ungültig.<button class="dl-x" aria-label="Schließen">×</button></div></div>
+<h3>Fortschritt</h3><div class="dl-progress" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" aria-label="3 von 5 erledigt"><span style="width:60%"></span></div>
+<h3>Tooltip</h3><span class="dl-tip">Hier kannst du einen neuen Termin anlegen.</span></section>
+
+<section class="sg-panel"><h2>Karten &amp; Zustände</h2><div class="sg-stack">
+<div class="dl-card"><strong>Familienausflug</strong><br><span class="muted">Sa, 22. März · 10:00–16:00</span></div>
+<div class="dl-card reminder"><strong>Training abholen</strong><br><span class="muted">Heute, 17:00</span></div>
+<div class="dl-avatars"><span class="dl-avatar" style="background:#00A6A9">M</span><span class="dl-avatar" style="background:#FE4758">P</span><span class="dl-avatar" style="background:#FFBC00;color:#042F57">L</span><span class="dl-avatar" style="background:#63C742">B</span></div>
+<div class="dl-empty"><strong>Noch keine Termine</strong><span class="muted">Plane den ersten Termin für deine Familie.</span><button class="jd-btn">＋ Termin erstellen</button></div></div></section>
+
+<section class="sg-panel"><h2>Overlays</h2>
+<h3>Bestätigungsdialog</h3><div class="dl-card sg-modal"><strong>Termin löschen?</strong><p class="muted">Möchtest du diesen Termin wirklich löschen? Das kann nicht rückgängig gemacht werden.</p><div class="sg-row"><button class="outline-button">Abbrechen</button><button class="jd-btn danger">Löschen</button></div></div>
+<h3>Menü</h3><div class="dl-menu"><button>✎ Bearbeiten</button><button>⧉ Duplizieren</button><button>⇪ Teilen</button><button class="danger">🗑 Löschen</button></div>
+<h3>Datum gewählt</h3><div class="sg-row"><span class="dl-day">17</span><span class="dl-day" aria-selected="true">18</span><span class="dl-day">19</span></div></section>
+</div></main></body></html>

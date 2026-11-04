@@ -1,0 +1,37 @@
+import assert from 'node:assert/strict';
+import { mkdtemp, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { spawn } from 'node:child_process';
+import { createServer } from 'node:http';
+import { loginCookie } from './helpers/auth.mjs';
+
+const ics = `BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nUID:persistence-smoke-1\r\nSUMMARY:Persistence smoke event\r\nDTSTART:20260921T090000Z\r\nDTEND:20260921T100000Z\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n`;
+const icsServer = createServer((_, res) => { res.writeHead(200, { 'Content-Type': 'text/calendar' }); res.end(ics); });
+await new Promise(resolve => icsServer.listen(0, resolve));
+const icsPort = icsServer.address().port;
+
+const dir = await mkdtemp(join(tmpdir(), 'jd-planning-state-'));
+const stateFile = join(dir, 'state.json');
+const port = 4323;
+const base = `http://127.0.0.1:${port}`;
+const start = () => spawn(process.execPath, ['server/index.mjs'], { env: { ...process.env, PORT: String(port), STATE_FILE: stateFile, BOOTSTRAP_EMAIL: 'test@example.com', BOOTSTRAP_PASSWORD: 'test-password-123' }, stdio: 'ignore' });
+const waitForHealth = async () => { for (let attempt = 0; attempt < 40; attempt++) { try { if ((await fetch(`${base}/api/health`)).ok) return; } catch {} await new Promise(resolve => setTimeout(resolve, 100)); } throw new Error('persistence smoke server did not start'); };
+let server = start(); await waitForHealth();
+let cookie = await loginCookie(base);
+const req = (path, opts = {}) => fetch(`${base}${path}`, { ...opts, headers: { ...(opts.headers ?? {}), Cookie: cookie } });
+const title = `restart-persisted-${Date.now()}`;
+const created = await req('/api/tasks', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title, owner: 'Jordan' }) });
+assert.equal(created.status, 201);
+const connected = await req('/api/providers/ics/connect', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url: `http://127.0.0.1:${icsPort}/calendar.ics`, label: 'Persisted calendar' }) });
+assert.equal(connected.status, 200);
+await new Promise(resolve => setTimeout(resolve, 150));
+server.kill(); await new Promise(resolve => setTimeout(resolve, 200));
+server = start(); await waitForHealth();
+cookie = await loginCookie(base);
+const tasks = await (await req('/api/tasks')).json();
+assert.ok(tasks.some(task => task.title === title));
+const providers = await (await req('/api/provider-connections')).json();
+assert.equal(providers.find(provider => provider.provider === 'ics')?.label, 'Persisted calendar');
+server.kill(); icsServer.close(); await rm(dir, { recursive: true, force: true });
+console.log('persistence: task and provider state survive server restart');

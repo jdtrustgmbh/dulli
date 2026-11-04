@@ -1,0 +1,30 @@
+.jd-frame{position:fixed;inset:0;z-index:9000;background:#0d1f29;color:#fff;cursor:pointer;overflow:hidden;outline:none}
+.jd-frame[hidden]{display:none}
+.jd-frame-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.6s ease}
+.jd-frame-img.visible{opacity:1}
+.jd-frame-clock{position:absolute;left:clamp(16px,4vw,48px);bottom:clamp(16px,5vh,56px);display:grid;gap:4px;padding:var(--space-4,16px) var(--space-5,24px);border-radius:var(--radius-xl,24px);background:rgba(13,31,41,.45);backdrop-filter:blur(6px)}
+.jd-frame-clock time{font-size:clamp(2.6rem,9vw,6.5rem);font-weight:800;letter-spacing:-.04em;line-height:1}
+.jd-frame-date{font-size:clamp(1rem,2.4vw,1.5rem);opacity:.9}
+.jd-frame-hint{position:absolute;right:clamp(16px,4vw,48px);bottom:clamp(16px,5vh,56px);margin:0;font-size:.9rem;opacity:.7}
+.jd-frame.sleep{background:#000}
+.jd-frame.sleep .jd-frame-img{display:none}
+.jd-frame.sleep .jd-frame-clock{left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);background:none;backdrop-filter:none;text-align:center;opacity:.35}
+.jd-frame.sleep .jd-frame-hint{opacity:.25}
+body.jd-frame-active{overflow:hidden}
+.app-main .shell>.photos-panel{overflow:auto}
+.jd-frame-toolbar label{margin:0}
+.jd-frame-manager{display:grid;gap:var(--space-3,12px);margin-bottom:var(--space-5,24px)}
+.jd-frame-toolbar{display:flex;flex-wrap:wrap;gap:var(--space-2,8px);align-items:end}
+.jd-frame-toolbar>p{flex-basis:100%;margin:0}
+.jd-frame-toolbar .jd-file{display:inline-flex;align-items:center;cursor:pointer}
+.jd-inline{display:inline-grid}
+.jd-frame-msg:empty{display:none}
+.jd-frame-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:var(--space-3,12px)}
+.jd-frame-grid figure{position:relative;margin:0;border-radius:var(--radius-md,10px);overflow:hidden;border:1px solid var(--line);aspect-ratio:4/3;background:var(--surface-muted,#f6f8f8)}
+.jd-frame-grid img{width:100%;height:100%;object-fit:cover;display:block}
+.jd-frame-grid figcaption{position:absolute;left:6px;bottom:6px;padding:2px 8px;border-radius:999px;background:rgba(255,255,255,.85);color:var(--ink);font-size:.75rem;font-weight:700}
+.jd-frame-grid.deleting figure:not(:has(figcaption)){animation:jd-wiggle .6s ease-in-out infinite alternate}
+.jd-frame-remove{position:absolute;top:6px;right:6px;width:44px;height:44px;border-radius:50%;border:0;background:var(--coral);color:#fff;font-size:1.1rem;font-weight:800;cursor:pointer}
+.jd-frame-note{font-size:var(--text-sm,.875rem);margin:0}
+@keyframes jd-wiggle{from{transform:rotate(-.6deg)}to{transform:rotate(.6deg)}}
+@media (prefers-reduced-motion:reduce){.jd-frame-img{transition:none}.jd-frame-grid.deleting figure{animation:none}}

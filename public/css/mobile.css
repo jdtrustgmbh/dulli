@@ -1,0 +1,39 @@
+/* Phone polish (<=760px): loaded last, only touches layout problems found in the mobile audit. */
+@media (max-width:760px){
+  /* Floating "+" must never cover the last row of any page. */
+  .app-shell .shell{padding-bottom:92px}
+  .app-shell .shell.shell-wide{padding-bottom:0}
+
+  /* Meals: column headers are icons only (labels were clipped), aligned with the three slot columns. */
+  .mp-gutter-cell{flex-direction:row;justify-content:center;gap:0;min-width:0}
+  .mp-gutter-label{display:none}
+  .mp-gutter-icon{font-size:1.4rem}
+
+  /* Recipe box: category chips collapsed to slivers inside the flex column. */
+  .mp-filter,.mp-box-tools{flex:0 0 auto}
+  .mp-recipes-view .mp-scroll{padding-bottom:84px}
+
+  /* Manage: tiles with long German words, profile strip that can be swiped. */
+  .jd-more .tool-grid>.jd-tile{min-height:104px;padding:12px;gap:10px;font-size:.88rem;overflow-wrap:anywhere;hyphens:auto;-webkit-hyphens:auto}
+  .jd-more .jd-tile .jd-tile-ic{width:42px;height:42px}
+  .jd-more-profile-list{scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+  .jd-more-profile{scroll-snap-align:start}
+
+  /* Quick capture: three type buttons must all fit. */
+  #capture-form .capture-types{display:flex;gap:4px;overflow:visible;padding:3px}
+  #capture-form .capture-types .type{flex:1 1 0;min-width:0;padding:0 4px;font-size:.82rem;white-space:normal;line-height:1.1;text-align:center}
+
+  /* Dialogs: keep Save/Cancel reachable and the content scrollable on small screens. */
+  dialog[open]{max-height:calc(100dvh - 16px)}
+
+}
+
+/* Narrow phones (<=400px): calendar toolbar keeps its tools on one row; the view pills scroll. */
+@media (max-width:400px){
+  .cal-bar{gap:6px 2px}
+  .cal-nav{flex:1 1 0;min-width:0;gap:2px}
+  .cal-range-pill{padding:0 8px;font-size:.78rem}
+  .cal-search-wrap,.calendar-week-panel .cal-new{flex:0 0 auto}
+  .calendar-week-panel .cal-search,.calendar-week-panel .cal-new,.cal-icon-btn{width:40px;min-width:40px;height:40px;min-height:40px}
+  .cal-step{width:40px;min-width:40px}
+}

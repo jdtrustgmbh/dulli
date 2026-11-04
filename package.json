@@ -1,0 +1,50 @@
+{
+  "name": "dulli",
+  "version": "1.0.0",
+  "description": "Dulli - a calm, self-hostable family planner (calendar, tasks, rewards, meals, lists) as a PWA",
+  "license": "AGPL-3.0-only",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node --watch server/index.mjs",
+    "start": "node server/index.mjs",
+    "check": "node scripts/check.mjs",
+    "test": "node tests/units.test.mjs",
+    "verify": "node scripts/verify.mjs",
+    "test:all": "node scripts/run-tests.mjs",
+    "test:http": "node tests/http.test.mjs",
+    "test:a11y": "node tests/accessibility.test.mjs",
+    "test:lists": "node tests/lists.test.mjs",
+    "test:postgres": "node tests/postgres.test.mjs",
+    "test:settings": "node tests/settings.test.mjs",
+    "test:tasks": "node tests/tasks.test.mjs",
+    "test:night-mode": "node tests/night-mode.test.mjs",
+    "test:task-presets": "node tests/task-presets.test.mjs",
+    "test:meals-lists": "node tests/meals-lists.test.mjs",
+    "test:calendar": "node tests/holidays.test.mjs && node tests/calendar.test.mjs",
+    "test:holidays": "node tests/holidays.test.mjs",
+    "test:access": "node tests/access.test.mjs",
+    "test:google-reauth": "node tests/google-reauth.test.mjs",
+    "test:sync-button": "node tests/sync-button.test.mjs",
+    "test:google-sync": "node tests/google-sync.test.mjs",
+    "test:today-refresh": "node tests/today-refresh.test.mjs",
+    "test:public-i18n": "node tests/public-i18n.test.mjs",
+    "test:avatar-counts": "node tests/avatar-counts.test.mjs",
+    "test:shared-span": "node tests/shared-span.test.mjs",
+    "test:caldav": "node tests/caldav.test.mjs && node tests/caldav-e2e.test.mjs && node tests/credentials.test.mjs",
+    "test:meal-reward": "node tests/meals-reward.test.mjs",
+    "test:postgres-tenancy": "node tests/postgres-tenancy.test.mjs",
+    "test:rewards": "node tests/rewards.test.mjs",
+    "test:persistence": "node tests/persistence.test.mjs",
+    "test:deletion": "node tests/deletion.test.mjs",
+    "test:performance": "node tests/performance.test.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  },
+  "dependencies": {
+    "pg": "^8.23.0"
+  }
+}

@@ -1,0 +1,22 @@
+.jd-pin-dialog{border:0;border-radius:var(--radius-xl,24px);padding:0;box-shadow:var(--jd-shadow-2);max-width:min(360px,calc(100vw - 32px))}
+.jd-pin-dialog::backdrop{background:rgba(23,59,77,.55)}
+.jd-pin-box{display:grid;gap:var(--space-3,12px);padding:var(--space-5,24px);text-align:center}
+.jd-pin-box h2{margin:0;font-size:1.2rem}
+.jd-pin-box .jd-pin-hint:empty,.jd-pin-msg:empty{display:none}
+.jd-pin-dots{display:flex;justify-content:center;gap:14px;margin:var(--space-2,8px) 0}
+.jd-pin-dots span{width:16px;height:16px;border-radius:50%;border:2px solid var(--ink);transition:background .15s}
+.jd-pin-dots span.filled{background:var(--ink)}
+.jd-pin-msg{margin:0;color:var(--coral);font-weight:700;font-size:var(--text-sm,.875rem)}
+.jd-pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.jd-pin-pad button{min-height:64px;border:1px solid var(--line);border-radius:var(--radius-lg,16px);background:var(--surface-muted,#f6f8f8);color:var(--ink);font:inherit;font-size:1.5rem;font-weight:800;cursor:pointer}
+.jd-pin-pad button:active{background:var(--jd-soft-teal)}
+.jd-pin-pad button:disabled{opacity:.4;cursor:not-allowed}
+.jd-pin-box.shake{animation:jd-shake .35s}
+@keyframes jd-shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.jd-lock-status{margin:var(--space-2,8px) 0;font-weight:700;color:var(--coral)}
+.jd-lock-status.open{color:var(--teal)}
+.jd-lock-actions{display:flex;flex-wrap:wrap;gap:var(--space-2,8px);margin-bottom:var(--space-3,12px)}
+.jd-lock-areas{border:1px solid var(--line);border-radius:var(--radius-md,10px);padding:var(--space-3,12px);margin:var(--space-3,12px) 0 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:var(--space-2,8px)}
+.jd-lock-areas legend{font-size:var(--text-sm,.875rem);font-weight:700;color:var(--muted);padding:0 4px}
+.jd-lock-areas label{display:flex;align-items:center;gap:8px;min-height:var(--jd-touch,44px)}
+.jd-lock-areas input{width:20px;height:20px;accent-color:var(--teal)}
