@@ -1,0 +1,33 @@
+/* Wizard, routines, week view helpers, member list, moon rows. */
+.wizard-form{padding:var(--space-7);position:relative}
+.wizard-actions{margin-top:var(--space-5);display:flex;gap:var(--space-2);flex-wrap:wrap}
+.wizard-step-body{margin-top:4px}
+.wizard-substep{margin-top:var(--space-4)}
+.wizard-step-body select{width:100%}
+.owner-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.routine-add-slot,.routine-edit-slot{flex:0 0 auto;min-height:0}
+.routine-add-slot:has(.routine-form),.routine-edit-slot:has(.routine-form){flex:1;overflow-y:auto}
+.week-nav .outline-button{padding:0;min-width:36px;min-height:36px;width:36px;height:36px;border-radius:50%;display:grid;place-items:center}
+.week-grid{display:flex;flex-direction:column;gap:6px;margin-top:14px;overflow-x:auto;padding-bottom:8px}
+.week-allday-chip{display:flex;align-items:center;gap:4px;font-size:.66rem;font-weight:700;padding:3px 6px;border-radius:var(--radius-sm);border-left:3px solid;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
+.week-allday-chip span{overflow:hidden;text-overflow:ellipsis}
+.week-allday-chip{cursor:pointer}
+.week-event.is-past,.week-allday-chip.is-past{filter:grayscale(0.6);opacity:.55}
+.week-quick-add{position:absolute;top:44px;left:3px;right:3px;z-index:3;display:grid;gap:6px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-md);padding:var(--space-2);box-shadow:var(--shadow-md)}
+.week-quick-add input{border:1px solid var(--line);border-radius:var(--radius-sm);padding:6px 8px;font:inherit;font-size:var(--text-sm);min-height:36px}
+.week-quick-add button{border:0;border-radius:var(--radius-sm);background:var(--ink);color:#fff;padding:6px;font:inherit;font-size:var(--text-sm);cursor:pointer;min-height:36px}
+@media(max-width:700px){.week-day-col{flex:1 0 108px;min-width:108px}}
+.school-child{font-weight:700}
+.routines-panel{grid-column:1/-1}
+.routine-form{display:grid;gap:var(--space-3);max-width:420px;margin-top:var(--space-3);padding:var(--space-4);border:1px solid var(--line);border-radius:var(--radius-md);background:var(--surface-muted)}
+.routine-form label{font-size:var(--text-md);font-weight:700;display:grid;gap:6px}
+.routine-form input[type="text"],.routine-form input:not([type]),.routine-form select{min-height:44px;border:1px solid var(--line);border-radius:var(--radius-md);padding:var(--space-2) var(--space-3);font:inherit}
+.routine-frequency{border:0;padding:0;margin:0;display:flex;gap:var(--space-4);flex-wrap:wrap}
+.routine-frequency legend{font-size:var(--text-xs);color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-weight:800;margin-bottom:4px}
+.routine-frequency label{display:flex;align-items:center;gap:6px;font-weight:600}
+.routine-days{display:flex;gap:6px;flex-wrap:wrap}
+.routine-days label{display:flex;align-items:center;gap:4px;font-weight:600;font-size:var(--text-sm);border:1px solid var(--line);border-radius:var(--radius-sm);padding:6px 10px}
+.member-list li>span:nth-of-type(1){flex:1}
+.week-moon{cursor:default;background:var(--fill-2);border-left-color:#6b74a8}
+.week-moon-new{background:var(--fill-3);border-left-color:#3d4466}
+.moon-row input{width:20px;height:20px}

@@ -1,0 +1,48 @@
+/* Sub-pages of Manage: Frames, Timetables, Connect calendar, Recommend Dulli */
+.tool-grid>[data-provider-grid]{display:none}
+.tool-grid .jd-tile[hidden]{display:none!important}
+.hub-panel{grid-column:1/-1}
+.app-shell .shell>.hub-panel{background:var(--fill);border-radius:26px;padding:22px clamp(14px,2vw,26px) 28px;margin-top:4px;border:0;box-shadow:none}
+.hub-panel>.card-heading{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-bottom:18px;justify-content:flex-start}
+.hub-panel>.card-heading [data-hub-back]{order:-1;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border:0;border-radius:999px;background:var(--paper);color:var(--ink);font-weight:800;font-size:.9rem;white-space:nowrap;text-decoration:none;cursor:pointer}
+.hub-panel h2{margin:0;font-size:1.75rem;font-weight:800}
+.hub-panel .muted{margin:4px 0 0}
+.hub-body{display:grid;gap:14px}
+.hub-explain,.hub-card,.hub-share,.hub-list li{background:var(--paper);border-radius:22px;padding:16px 20px}
+.hub-explain p{margin:0 0 8px}
+.hub-ladder{list-style:none;margin:14px 0 4px;padding:0;display:flex;flex-wrap:wrap;gap:22px}
+.hub-ladder li{display:grid;justify-items:center;gap:4px;min-width:84px;text-align:center}
+.hub-ladder .jd-avatar{display:grid;place-items:center;background:var(--fill);font-size:1.4rem}
+.hub-ladder small,.hub-card small,.hub-list small{opacity:.7;font-weight:600}
+.hub-card header{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.hub-card header>div{display:grid;gap:2px}
+.hub-card .jd-avatar{width:56px;height:56px;flex:0 0 56px}
+.hub-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.hub-list li{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.hub-list li>div{display:grid;gap:2px}
+.hub-panel .jd-btn{min-height:44px;padding:0 18px;border:0;border-radius:999px;background:var(--fill);color:var(--ink);font:inherit;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;text-decoration:none}
+.hub-panel .jd-btn.danger{color:#b23f1b;background:var(--coral-tint,#fbe6df)}
+.hub-panel .jd-btn.primary{background:var(--teal);color:#fff}
+.hub-share{display:grid;gap:14px}
+.hub-share-text{margin:0;font-weight:700}
+.hub-share-grid{display:flex;flex-wrap:wrap;gap:10px}
+.hub-share .muted{margin:0}
+.hub-body>[data-provider-grid]{display:grid}
+.hub-body .provider-grid{grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin:0}
+.hub-body .provider-card{display:grid;gap:8px;padding:16px 18px;border:0;border-radius:22px;background:var(--paper)}
+.hub-body .provider-card strong{font-size:1rem;font-weight:800}
+.hub-body .provider-card small{color:var(--muted);font-size:.82rem}
+.hub-body .provider-card .provider-status{display:inline-flex;align-items:center;min-height:26px;padding:0 10px;border-radius:999px;background:var(--fill);color:var(--muted);font-size:.72rem;width:max-content}
+@media (max-width:640px){.hub-body .provider-grid{grid-template-columns:1fr}}
+.hub-card h3{margin:0 0 6px;font-size:1.05rem;font-weight:800}
+.hub-card h3 small{font-weight:600;opacity:.6}
+.hub-card .muted{margin:0 0 10px}
+.hub-checks{display:flex;flex-wrap:wrap;gap:10px}
+.hub-check{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 18px;border-radius:999px;background:var(--fill);font-weight:700;cursor:pointer}
+.hub-check input{width:22px;height:22px;margin:0}
+.hub-card select{min-height:48px;border:0;border-radius:999px;background:var(--fill);color:inherit;padding:0 18px;font:inherit;font-weight:600}
+/* The page fills the screen and scrolls inside, so long lists (many profiles, recipes) stay reachable. */
+.app-main .shell>.hub-panel{overflow-y:auto;overflow-x:hidden}
+@media (max-width:760px){.app-shell .shell>.hub-panel{padding-bottom:110px}}
+/* Language and moon settings live under Settings; the rows stay in the DOM for the scripts that read them. */
+.jd-more .language-row{display:none!important}

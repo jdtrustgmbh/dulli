@@ -26,6 +26,13 @@
     "test:calendar": "node tests/holidays.test.mjs && node tests/calendar.test.mjs",
     "test:holidays": "node tests/holidays.test.mjs",
     "test:signup": "node tests/signup.test.mjs",
+    "test:static-assets": "node tests/static-assets.test.mjs",
+    "test:no-flash": "node tests/no-flash.test.mjs",
+    "test:manage-pages": "node tests/manage-pages.test.mjs",
+    "test:school-timetable": "node tests/school-timetable.test.mjs",
+    "test:dropdown": "node tests/dropdown.test.mjs",
+    "test:profile-personalize": "node tests/profile-personalize.test.mjs",
+    "test:settings-views": "node tests/settings-from-views.test.mjs",
     "test:access": "node tests/access.test.mjs",
     "test:google-reauth": "node tests/google-reauth.test.mjs",
     "test:sync-button": "node tests/sync-button.test.mjs",
@@ -40,7 +47,8 @@
     "test:rewards": "node tests/rewards.test.mjs",
     "test:persistence": "node tests/persistence.test.mjs",
     "test:deletion": "node tests/deletion.test.mjs",
-    "test:performance": "node tests/performance.test.mjs"
+    "test:performance": "node tests/performance.test.mjs",
+    "test:og-image": "node tests/og-image.test.mjs"
   },
   "devDependencies": {
     "playwright": "^1.63.0"

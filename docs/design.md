@@ -127,7 +127,7 @@ Weiß, 1,5 px Rand `--fog-300`, 10 px Radius, 46 px Höhe, Platzhalter `--fog-50
 
 #### Formularelemente
 
-- Textbereich und Auswahl wie Eingabefelder, mindestens 96 px bzw. 46 px hoch.
+- Textbereich und Auswahl wie Eingabefelder, mindestens 96 px bzw. 46 px hoch. Jedes Dropdown (`<select>`, einfach) zeigt rechts einen kleinen Pfeil nach unten: eine zentrale Regel in `controls.css` (Token `--ctl-chevron`), die in allen Komponenten gilt; Ausnahme `.jd-raw`, Mehrfachauswahl.
 - Checkbox und Radio: 20 px, Türkis (`accent-color`).
 - Schalter: Grün für „an“.
 - Segmentierte Auswahl `.dl-segmented` mit `aria-pressed`.
@@ -161,16 +161,16 @@ Technik:
 - Primäre Buttons nutzen `--btn-primary`, `--btn-primary-ink`, `--btn-primary-hover`: Tag dunkelblau mit weißer Schrift, Nacht türkis mit dunkler Schrift.
 - Nachtfarben: Hintergrund `#0B1622`, Karten `#132235`, Text `#E9F1F8`, Hilfstext `#9FB1C3`, Aktion-Türkis `#0E9FA2`. Markenfarben für Logo, Herz, Avatare und Münzen bleiben unverändert.
 - Logos: Jede Logo-`<img>` hat einen Zwilling mit `brand-logo--dark` (weiße Wortmarke). CSS blendet je nach Modus eines aus. Das Symbol auf dem Smartphone bleibt gleich.
-- Jede neue Seite bindet das Frühskript, `public/css/brand.css` und `public/css/dark.css` ein (Vorlage: `login.html`). Die App lädt `dark.css` über den Feature-Loader als letzte Datei.
+- Jede neue Seite bindet das Frühskript, `public/css/site.css` und `public/css/dark.css` ein (Vorlage: `login.html`). Die App lädt alles als ein Stylesheet `/dulli.css`, das der Server aus den Quelldateien zusammensetzt (Reihenfolge: `server/bundles.mjs`); `dark.css` steht dort zuletzt.
 - Kontrast gilt im Nachtmodus genauso: mindestens 4,5:1 für Text.
 
 ### 9. Technik
 
-Reihenfolge der Stylesheets: `public/css/brand.css` (Markenkonstanten und Logo-Größen), `styles.css` (Basis-Tokens), `public/css/theme.css` (aktuelles Theme), Feature-Dateien, `public/css/controls.css` (Bedienelemente), `public/css/mobile.css`. Farben werden ausschließlich über Tokens verwendet, nie als neue Hex-Werte in Komponenten. Brauchst du eine neue Farbe, wird sie hier und in den Tokens ergänzt.
+Reihenfolge der Stylesheets in der App (`server/bundles.mjs`): `foundation.css` (Marken- und Basis-Tokens, Rahmen), `today.css`, `forms.css`, `modules.css`, `planner.css`, `tokens.css`, `public/css/theme.css` (aktuelles Theme), Feature-Dateien, `public/css/controls.css` (Bedienelemente), `public/css/mobile.css`. Farben werden ausschließlich über Tokens verwendet, nie als neue Hex-Werte in Komponenten. Brauchst du eine neue Farbe, wird sie hier und in den Tokens ergänzt.
 
 Neue Seite anlegen:
 
-1. Im `<head>` Theme-Color, Icon-Links und `/css/brand.css` wie in `login.html` einbinden.
+1. Im `<head>` Theme-Color, Icon-Links und `/css/site.css` wie in `login.html` einbinden.
 2. Logo als `<a class="brand" aria-label="Dulli"><img class="brand-logo" alt="" …></a>`.
 3. Name im Text immer „Dulli“.
 4. Statische Dateien kommen nach `f/` (öffentlich ausgeliefert). Danach `CACHE` in `sw.js` erhöhen.
@@ -285,7 +285,7 @@ Vollflächige Diashow, Uhr oben links klein, weiße Schrift mit Schatten.
 > Das verbindliche Erscheinungsbild steht im [Dulli Designguide](dulli-design-guide.md). Dieses Dokument ist nur noch Hintergrund.
 
 
-Ergänzt `docs/design.md`. Tokens: `public/css/base.css :root` (Basis) und `public/css/tokens.css` (Erweiterung). Eigenständiges Design, kein Dæly-Look.
+Ergänzt `docs/design.md`. Tokens: `public/css/foundation.css :root` (Basis) und `public/css/tokens.css` (Erweiterung). Eigenständiges Design, kein Dæly-Look.
 
 ### Prinzipien
 - **Heute zuerst, ruhig, großzügig:** wenig Chrome, runde Karten, ein Akzent pro Bereich. Kein Spiele-/Social-Look.

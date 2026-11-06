@@ -181,6 +181,8 @@ body:has(.tasks-board-panel:not([hidden])) .routines-panel{display:none!importan
 /* ---------- Today block ---------- */
 .jd-today-tasks-card #task-list,.jd-today-tasks-card .today-owner-filter{display:none!important}
 .jd-today-tasks{display:grid;gap:10px;overflow:auto;min-height:0}
+.jd-today-tasks-card .pager{display:none}
+@media(max-width:700px){.jd-today-tasks{flex:none;overflow:visible;max-height:none}}
 .jd-today-row{display:grid;gap:8px;padding:10px 12px;border-radius:18px;background:color-mix(in srgb,var(--member) 15%,#fff)}
 .jd-today-row header{display:flex;align-items:center;gap:8px}
 .jd-today-row header strong{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}

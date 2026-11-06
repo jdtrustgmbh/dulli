@@ -2,6 +2,7 @@
 //   extras.recipes  = { categories: [name], items: [{ id, name, emojis: [<=4], photo: dataURL|null, servings, ingredients: 'one per line', prep, categories: [name] }] }
 //   extras.mealPlan = { entries: [{ id, date: 'YYYY-MM-DD', slot: 'breakfast'|'lunch'|'dinner', recipeId|null, title, servings,
 //                                   repeat?: { days: [0-6 getDay], until: 'YYYY-MM-DD'|null }, skip?: ['YYYY-MM-DD'] }] }
+//   extras.mealSettings = { slots: {breakfast,lunch,dinner: boolean}, weekStart: 1|0|6 (Mon/Sun/Sat), servings: number|null (household default; null = as in the recipe) }, edited in Manage > Meals.
 //   A one-off entry on a date overrides a repeating series for that slot. Public: window.jdMeals.render(panel, { backHtml, onRender }).
 (() => {
   const SLOTS = [{ key: 'breakfast', label: 'Breakfast', icon: '🌅' }, { key: 'lunch', label: 'Lunch', icon: '☀️' }, { key: 'dinner', label: 'Dinner', icon: '🌙' }];
@@ -16,7 +17,13 @@
   const ymd = date => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
   const parse = key => { const [y, m, d] = key.split('-').map(Number); return new Date(y, m - 1, d); };
   const addDays = (date, n) => { const next = new Date(date); next.setDate(next.getDate() + n); return next; };
-  const monday = date => { const start = new Date(date.getFullYear(), date.getMonth(), date.getDate()); return addDays(start, -((start.getDay() + 6) % 7)); };
+  // Meal settings (Manage > Meals): which meals are planned, first day of the week, household servings.
+  const settings = () => ({ slots: {}, weekStart: 1, servings: null, ...(window.jdExtras?.get('mealSettings', null) ?? {}) });
+  const activeSlots = () => { const list = SLOTS.filter(slot => settings().slots?.[slot.key] !== false); return list.length ? list : SLOTS; };
+  const firstDay = () => ([0, 1, 6].includes(Number(settings().weekStart)) ? Number(settings().weekStart) : 1);
+  const plannedServings = recipe => Number(settings().servings) || recipe?.servings || 2;
+  // First day of the week containing the date (named for the default Monday; honours the week-start setting).
+  const monday = date => { const start = new Date(date.getFullYear(), date.getMonth(), date.getDate()); return addDays(start, -((start.getDay() - firstDay() + 7) % 7)); };
   const fmt = (date, options) => new Intl.DateTimeFormat(locale(), options).format(date);
   const guard = async (area, fn) => (window.jdLock?.guard ? window.jdLock.guard(area, fn) : fn());
   const graphemes = text => { try { return [...new Intl.Segmenter(undefined, { granularity: 'grapheme' }).segment(text)].map(part => part.segment); } catch { return [...text]; } };
@@ -103,17 +110,18 @@
 
   function renderWeek() {
     const panel = panelRef; if (!panel) return;
+    weekStart = monday(weekStart);
     panel.classList.add('mp-panel');
     panel.dataset.view = view;
     if (view === 'recipes') { renderRecipesView(panel); return; }
     const entries = plan().entries; const today = ymd(new Date());
     const days = Array.from({ length: 7 }, (_, index) => addDays(weekStart, index));
-    const plannedCount = days.reduce((sum, day) => sum + SLOTS.filter(slot => mealAt(entries, ymd(day), slot.key)).length, 0);
+    const plannedCount = days.reduce((sum, day) => sum + activeSlots().filter(slot => mealAt(entries, ymd(day), slot.key)).length, 0);
     const dayHead = day => { const key = ymd(day); const wd = fmt(day, { weekday: 'short' }).replace(/\.$/, ''); return `<div class="mp-day-head" data-i18n-skip>${key === today ? `<span class="sr-only">${esc(T('Today'))}</span>` : ''}<span class="mp-day-pill"><span class="mp-wd">${esc(wd)},</span> <span class="mp-dn">${day.getDate()}.</span></span></div>`; };
     panel.innerHTML = `${headHtml(plannedCount)}
-      <div class="mp-scroll"><div class="mp-week">
-        <div class="mp-gutter" aria-hidden="true"><span class="mp-gutter-head"></span>${SLOTS.map(slot => `<span class="mp-gutter-cell mp-${slot.key}" title="${slot.label}"><span class="mp-gutter-icon">${slot.icon}</span><span class="mp-gutter-label">${slot.label}</span></span>`).join('')}</div>
-        ${days.map(day => `<div class="mp-day${ymd(day) === today ? ' is-today' : ''}" data-date="${ymd(day)}">${dayHead(day)}${SLOTS.map(slot => tileHtml(day, slot, entries)).join('')}</div>`).join('')}
+      <div class="mp-scroll"><div class="mp-week" style="--mp-slots:${activeSlots().length}">
+        <div class="mp-gutter" aria-hidden="true"><span class="mp-gutter-head"></span>${activeSlots().map(slot => `<span class="mp-gutter-cell mp-${slot.key}" title="${slot.label}"><span class="mp-gutter-icon">${slot.icon}</span><span class="mp-gutter-label">${slot.label}</span></span>`).join('')}</div>
+        ${days.map(day => `<div class="mp-day${ymd(day) === today ? ' is-today' : ''}" data-date="${ymd(day)}">${dayHead(day)}${activeSlots().map(slot => tileHtml(day, slot, entries)).join('')}</div>`).join('')}
       </div></div>`;
     options.onRender?.(panel);
     wireHead(panel, days);
@@ -169,7 +177,7 @@
   }
   function pushWeek(days) {
     const entries = plan().entries; const lines = [];
-    for (const day of days) for (const slot of SLOTS) { const entry = mealAt(entries, ymd(day), slot.key); if (entry) lines.push(...shoppingLines(entry)); }
+    for (const day of days) for (const slot of activeSlots()) { const entry = mealAt(entries, ymd(day), slot.key); if (entry) lines.push(...shoppingLines(entry)); }
     return pushToShopping(lines, 'ingredients added to the shopping list');
   }
 
@@ -179,7 +187,7 @@
       const value = plan(); const current = target.entryId ? value.entries.find(entry => entry.id === target.entryId) : null;
       const name = recipe?.name ?? title;
       if (current && !current.repeat) Object.assign(current, { recipeId: recipe?.id ?? null, title: name });
-      else value.entries.push({ id: uid('meal'), date: target.date, slot: target.slot, recipeId: recipe?.id ?? null, title: name, servings: current?.servings ?? recipe?.servings ?? 2 });
+      else value.entries.push({ id: uid('meal'), date: target.date, slot: target.slot, recipeId: recipe?.id ?? null, title: name, servings: current?.servings ?? plannedServings(recipe) });
       await savePlan(value);
       const earned = current ? 0 : await rewardPlanning(target, name);
       say(`${name}: ${T('meal planned')}${earned ? ` · +${earned} ${T('coins')}` : ''}`);
@@ -234,7 +242,7 @@
     const recipe = recipeById(entry.recipeId); const title = recipe?.name ?? entry.title; const slotInfo = SLOTS.find(item => item.key === slot);
     const day = parse(date); const lines = shoppingLines(entry);
     const repeatDays = entry.repeat?.days ?? [day.getDay()];
-    const weekdayOrder = [1, 2, 3, 4, 5, 6, 0];
+    const weekdayOrder = Array.from({ length: 7 }, (_, index) => (firstDay() + index) % 7);
     const html = `<div class="mp-meal-hero"><span class="mp-thumb big">${thumb(recipe, title)}</span><div><p class="eyebrow">${slotInfo.icon} ${slotInfo.label} · <span data-i18n-skip>${esc(fmt(day, { weekday: 'long', day: 'numeric', month: 'long' }))}</span></p><h3 data-i18n-skip>${esc(title)}</h3>${entry.repeat ? `<p class="muted">🔁 <span>Repeats</span> <span data-i18n-skip>${esc(entry.repeat.days.slice().sort((a, b) => ((a + 6) % 7) - ((b + 6) % 7)).map(n => fmt(addDays(monday(new Date()), (n + 6) % 7), { weekday: 'short' })).join(', '))}${entry.repeat.until ? ` → ${esc(fmt(parse(entry.repeat.until), { day: 'numeric', month: 'short' }))}` : ''}</span></p>` : ''}</div></div>
       <div class="mp-servings" role="group" aria-label="Servings"><span>Servings</span><button type="button" class="mp-step" data-step="-1" aria-label="Fewer servings">−</button><output class="mp-servings-value">${esc(entry.servings ?? recipe?.servings ?? 2)}</output><button type="button" class="mp-step" data-step="1" aria-label="More servings">＋</button></div>
       ${recipe ? `<div class="mp-recipe-view">${lines.length ? `<h4>Ingredients</h4><ul data-i18n-skip>${lines.map(line => `<li>${esc(line)}</li>`).join('')}</ul>` : ''}${recipe.prep ? `<details><summary>Preparation</summary><p class="mp-prep" data-i18n-skip>${esc(recipe.prep)}</p></details>` : ''}</div>` : ''}
@@ -295,7 +303,7 @@
   }
 
   function openRecipeEditor(recipe, after) {
-    const data = recipes(); const draft = { id: recipe?.id ?? uid('recipe'), name: recipe?.name ?? '', emojis: [...(recipe?.emojis ?? [])], photo: recipe?.photo ?? null, servings: recipe?.servings ?? 2, ingredients: recipe?.ingredients ?? '', prep: recipe?.prep ?? '', categories: [...(recipe?.categories ?? [])] };
+    const data = recipes(); const draft = { id: recipe?.id ?? uid('recipe'), name: recipe?.name ?? '', emojis: [...(recipe?.emojis ?? [])], photo: recipe?.photo ?? null, servings: recipe?.servings ?? (Number(settings().servings) || 2), ingredients: recipe?.ingredients ?? '', prep: recipe?.prep ?? '', categories: [...(recipe?.categories ?? [])] };
     let categories = [...data.categories];
     const html = `<form class="mp-recipe-form">
       <label class="jd-field">Recipe name<input name="name" required maxlength="80" value="${esc(draft.name)}" placeholder="e.g. Lentil soup"></label>
@@ -339,7 +347,7 @@
   // ---------- Today card: today's meals ----------
   function renderToday() {
     const column = document.querySelector('.today-grid .side-column'); if (!column || !window.jdExtras) return;
-    const key = ymd(new Date()); const entries = plan().entries; const meals = SLOTS.map(slot => ({ slot, entry: mealAt(entries, key, slot.key) })).filter(item => item.entry);
+    const key = ymd(new Date()); const entries = plan().entries; const meals = activeSlots().map(slot => ({ slot, entry: mealAt(entries, key, slot.key) })).filter(item => item.entry);
     let card = column.querySelector('.mp-today-card');
     if (!meals.length) { card?.remove(); return; }
     if (!card) { card = document.createElement('article'); card.className = 'card mp-today-card'; column.prepend(card); }
@@ -353,6 +361,7 @@
   const refreshAll = () => { renderToday(); if (panelRef && !panelRef.hidden && panelRef.isConnected && !dialog?.open) renderWeek(); };
   window.jdExtras?.subscribe('mealPlan', refreshAll);
   window.jdExtras?.subscribe('recipes', refreshAll);
+  window.jdExtras?.subscribe('mealSettings', refreshAll);
   window.jdExtras?.ready?.()?.then(renderToday);
 
   window.jdMeals = { render, mealAt, scaleLine, emojisOf, ymd };

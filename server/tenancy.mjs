@@ -38,6 +38,7 @@ export function serializeBundle(bundle) {
     listItems: bundle.listItems,
     photos: bundle.photos,
     extras: bundle.extras,
+    school: bundle.optionalModules.school(),
     listNames: [...bundle.listNames],
     events: [...bundle.events],
     calendarConnections: bundle.calendarConnections,
@@ -54,6 +55,7 @@ export function deserializeBundle(id, saved) {
   bundle.listItems.push(...(saved.listItems ?? []));
   bundle.photos.push(...(saved.photos ?? []));
   Object.assign(bundle.extras, saved.extras ?? {});
+  bundle.optionalModules.restoreSchool(saved.school);
   (saved.listNames ?? []).forEach(name => bundle.listNames.add(name));
   for (const [key, event] of saved.events ?? []) bundle.events.set(key, event);
   bundle.calendarConnections.push(...(saved.calendarConnections ?? []));

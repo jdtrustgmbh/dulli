@@ -13,7 +13,18 @@
 .member-list .jd-icon-btn{min-width:var(--jd-touch,44px);min-height:var(--jd-touch,44px);border:1px solid var(--line);border-radius:var(--radius-md,10px);background:var(--paper);color:var(--ink);font-size:1rem;cursor:pointer}
 .member-list .jd-icon-btn.danger{color:var(--coral)}
 .member-list .jd-icon-btn:disabled{opacity:.35;cursor:default}
-.jd-profile-list li.jd-profile-editor{display:grid;gap:var(--space-3,12px);background:var(--surface-muted,#f6f8f8)}
+dialog.jd-profile-dialog{width:min(520px,calc(100vw - 24px));max-height:calc(100dvh - 24px);padding:0;border:0;border-radius:26px;background:var(--paper,#fff);color:var(--ink,#1c2b33);box-shadow:0 24px 70px rgba(0,0,0,.28);overflow:auto}
+dialog.jd-profile-dialog::backdrop{background:rgba(20,30,36,.5)}
+.jd-profile-dialog .jd-profile-editor{display:grid;gap:18px;padding:20px 22px 22px}
+.jd-profile-dialog-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.jd-profile-dialog-head h3{margin:0;font-size:1.3rem;font-weight:800}
+.jd-profile-dialog .jd-icon-btn{min-width:44px;min-height:44px;border:0;border-radius:999px;background:var(--fill,#eef2f3);color:var(--ink,#1c2b33);font-size:1.1rem;cursor:pointer}
+.jd-profile-dialog .jd-field{display:grid;gap:6px;font-weight:800;font-size:.95rem}
+.jd-profile-dialog input:not([type=color]):not([type=file]){min-height:48px;border:0;border-radius:999px;background:var(--fill,#eef2f3);color:inherit;padding:0 18px;font:inherit;font-weight:600}
+.jd-profile-dialog .jd-btn{min-height:44px;padding:0 18px;border:0;border-radius:999px;background:var(--fill,#eef2f3);color:inherit;font-weight:700;cursor:pointer;display:inline-flex;align-items:center}
+.jd-profile-dialog .jd-btn.danger{color:#b23f1b}
+.jd-profile-dialog-actions{display:flex;justify-content:flex-end}
+.jd-profile-dialog-actions .primary-button{min-height:48px;padding:0 26px}
 .jd-rename{display:flex;gap:var(--space-2,8px);align-items:end}
 .jd-rename .jd-field{flex:1}
 .jd-swatches{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
@@ -29,3 +40,31 @@
 
 .avatar-count.done{background:var(--green,#63C742);color:#fff}
 .avatar-chip[role=button]{cursor:pointer}
+
+/* Kid personalisation: emoji avatars, frames unlocked by streaks, badges, wish list */
+.jd-ring-bronze{box-shadow:0 0 0 2px var(--paper,#fff),0 0 0 5px #c8783e!important}
+.jd-ring-silver{box-shadow:0 0 0 2px var(--paper,#fff),0 0 0 5px #9aa9bb!important}
+.jd-ring-gold{box-shadow:0 0 0 2px var(--paper,#fff),0 0 0 5px #e7b01f!important}
+.jd-ring-rainbow{box-shadow:0 0 0 2px var(--paper,#fff),0 0 0 4px #e97962,0 0 0 6px #f5b53d,0 0 0 8px #3fa66e!important}
+.jd-emoji-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(48px,1fr));gap:8px}
+.jd-emoji{min-height:48px;border:2px solid transparent;border-radius:16px;background:var(--fill,#eef2f3);font-size:1.6rem;line-height:1;cursor:pointer;color:inherit}
+.jd-emoji-none{font-size:.8rem;font-weight:700}
+.jd-emoji.selected,.jd-swatch.selected,.jd-chipbtn.selected{border-color:var(--teal,#2b8c87);box-shadow:0 0 0 2px var(--teal,#2b8c87)}
+.jd-swatch-none{display:inline-grid;place-items:center;background:var(--fill,#eef2f3);color:inherit;font-weight:800}
+.jd-ring-row{display:flex;flex-wrap:wrap;gap:8px}
+.jd-chipbtn{display:inline-grid;gap:2px;min-height:48px;padding:6px 16px;border:2px solid transparent;border-radius:16px;background:var(--fill,#eef2f3);color:inherit;font:inherit;font-weight:800;cursor:pointer;text-align:left}
+.jd-chipbtn small{font-weight:600;opacity:.7}
+.jd-chipbtn:disabled{opacity:.5;cursor:not-allowed}
+.jd-chipbtn.jd-ring-pick{box-shadow:none!important}
+.jd-chipbtn.jd-ring-pick.selected{box-shadow:0 0 0 2px var(--teal,#2b8c87)!important}
+.jd-badges{display:flex;flex-wrap:wrap;gap:10px}
+.jd-badge{display:inline-grid;justify-items:center;gap:2px;width:78px;padding:8px 4px;border-radius:16px;background:var(--fill,#eef2f3);text-align:center}
+.jd-badge b{font-size:1.7rem;line-height:1}
+.jd-badge small{font-size:.72rem;font-weight:700;line-height:1.15}
+.jd-badge.locked{opacity:.45;filter:grayscale(1)}
+.jd-wishes{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.jd-wishes li{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 10px;border-radius:16px;background:var(--fill,#eef2f3)}
+.jd-wishes li>span{flex:1 1 140px;font-weight:700}
+.jd-wishes input[type=number]{width:84px}
+.jd-wish-form{display:flex;gap:8px}
+.jd-wish-form input{flex:1}

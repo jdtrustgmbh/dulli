@@ -170,10 +170,11 @@ try {
   await page.locator('.lp-list-chip[data-list="Shopping"][aria-pressed="true"]').waitFor();
   assert.equal(await page.locator('.lp-list-chip[data-list="Werkzeug"]').count(), 0);
 
-  // Persistence across reload + Today card
+  // Persistence across reload
   await page.reload({ waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => window.jdMeals && window.jdExtras?.get('mealPlan'));
-  await page.locator('.lp-today .lp-title-text').first().waitFor({ state: 'attached' });
+  await page.waitForTimeout(600);
+  assert.equal(await page.locator('.lp-today').count(), 0, 'the Today page has no shopping list card (it lives in the Lists tab)');
   await page.locator('.tabs a[href="#meals"]').click();
   await page.locator(`.mp-slot.filled[data-date="${tueDate}"][data-slot="dinner"]`).waitFor();
   assert.equal(await page.locator(`.mp-slot.filled[data-date="${thuDate}"]`).count(), 0, 'removed occurrence stays removed after reload');
@@ -194,7 +195,7 @@ try {
   assert.ok(checkSize.width >= 44 && checkSize.height >= 44, 'check targets are at least 44px');
   if (shots) await phone.screenshot({ path: `${shots}/shopping-phone.png` });
   await phone.locator('.tabs a[href="#more"]').click();
-  await phone.locator('[data-tool="Meals"]').click();
+  await phone.evaluate(() => document.querySelector('[data-tool="Meals"]').click());
   await phone.locator('.mp-week').waitFor();
   assert.ok(await phone.evaluate(() => { const card = document.querySelector('.meals-panel'); return card.scrollHeight - card.clientHeight; }) <= 2, 'meals panel does not clip on phone');
   assert.ok(await phone.evaluate(() => document.documentElement.scrollWidth - window.innerWidth) <= 2, 'meals: no horizontal overflow on phone');

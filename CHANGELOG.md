@@ -4,6 +4,10 @@ All notable changes to Dulli are documented here. The format follows [Keep a Cha
 
 ## [Unreleased]
 
+- Added: school timetable per child (tabs), a colour per subject, one small edit button per lesson and a dialog to add or edit lessons; timetables are now saved with the household.
+- Added: dropdown component - every single-choice select shows a chevron on the right (documented in the styleguide).
+- Added: Open Graph and Twitter tags with an absolute image URL on the public pages for link previews.
+- Added: more animal avatars in the profile settings (horse, cow, pig, owl, penguin and more).
 - Added: signup link. Set `SIGNUP_CODE` and share `/signup?code=...`: every family that uses it gets its own household and the setup wizard (`SIGNUP_LIMIT` caps the number of families).
 
 ## [1.0.0] - 2026-11-04

@@ -54,13 +54,16 @@ try {
     await page.locator('.settings-panel [data-open-tool="Family"]').click();
     await page.locator('.members-panel:not([hidden]) .jd-profile-list').waitFor();
     await page.locator('.jd-profile-list li[data-profile="Mira"] [data-profile-edit]').click();
+    await page.locator('dialog.jd-profile-dialog[open]').waitFor();
+    const box = await page.locator('dialog.jd-profile-dialog').boundingBox(); const viewport = page.viewportSize();
+    assert.ok(box.y >= 0 && box.y + box.height <= viewport.height, 'the profile editor opens as an overlay fully inside the viewport');
     await page.locator('.jd-profile-editor [data-color="#8f7ac4"]').click();
     await page.waitForFunction(() => window.jdMemberColor('Mira') === '#8f7ac4');
     assert.equal((await extras()).profiles.Mira.color, '#8f7ac4');
-    await page.locator('.jd-profile-list li[data-profile="Mira"] [data-profile-edit]').click();
     await page.locator('.jd-profile-editor input[type="file"]').setInputFiles(await pngFile('me.png', '#e97962'));
     await page.waitForFunction(() => (window.jdExtras.get('profiles', {}).Mira?.photo ?? '').startsWith('data:image/jpeg'));
     await page.waitForFunction(() => [...document.querySelectorAll('.avatar-row .avatar-chip')].some(chip => chip.title === 'Mira' && chip.classList.contains('has-photo')));
+    await page.keyboard.press('Escape'); await page.locator('dialog.jd-profile-dialog').waitFor({ state: 'detached' });
     await page.locator('.jd-profile-list li[data-profile="Theo"] [data-move="-1"]').click();
     await page.waitForFunction(() => document.querySelector('.jd-profile-list li[data-profile]')?.dataset.profile === 'Theo');
     await page.locator('.jd-profile-list li[data-profile="Mira"] [data-profile-edit]').click();

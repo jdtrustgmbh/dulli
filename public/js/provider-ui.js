@@ -31,8 +31,8 @@
   });
   const esc = value => String(value ?? '').replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]));
   const enhance = () => {
-    const grid = document.querySelector('.tool-grid'); if (!grid || grid.querySelector('[data-provider-grid]')) return;
-    const panel = document.createElement('div'); panel.dataset.providerGrid = 'true'; panel.className = 'provider-grid'; grid.append(panel);
+    const grid = document.querySelector('.tool-grid'); if (!grid || document.querySelector('[data-provider-grid]')) return;
+    const panel = document.createElement('div'); panel.dataset.providerGrid = 'true'; panel.className = 'provider-grid'; panel.style.display = 'none'; grid.append(panel); // shown by the Connect calendar page (hub-pages.js)
     let providers = [];
     const render = async () => {
       let connections;

@@ -16,8 +16,6 @@
   /* Manage: tiles with long German words, profile strip that can be swiped. */
   .jd-more .tool-grid>.jd-tile{min-height:104px;padding:12px;gap:10px;font-size:.88rem;overflow-wrap:anywhere;hyphens:auto;-webkit-hyphens:auto}
   .jd-more .jd-tile .jd-tile-ic{width:42px;height:42px}
-  .jd-more-profile-list{scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
-  .jd-more-profile{scroll-snap-align:start}
 
   /* Quick capture: three type buttons must all fit. */
   #capture-form .capture-types{display:flex;gap:4px;overflow:visible;padding:3px}

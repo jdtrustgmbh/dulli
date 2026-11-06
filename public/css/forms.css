@@ -1,0 +1,21 @@
+/* Dialogs, form controls, accessibility helpers, touch sizes, [hidden]. */
+dialog{border:0;border-radius:var(--radius-xl);padding:0;max-width:460px;width:calc(100% - 32px);box-shadow:var(--shadow-lg)}
+dialog::backdrop{background:#173b4d88}
+#capture-form{padding:var(--space-7);position:relative}
+label{display:block;font-size:var(--text-md);font-weight:700;margin:var(--space-5) 0 var(--space-2)}
+input{width:100%;border:1px solid var(--line);border-radius:var(--radius-md);padding:13px;font:inherit}
+select{border:1px solid var(--line);border-radius:var(--radius-md);padding:9px 12px;background:var(--paper);color:var(--ink);font:inherit;cursor:pointer}
+.type.active{background:var(--teal-tint);border-color:var(--teal);color:var(--teal)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+@media(max-width:700px){.app-shell{flex-direction:column}.app-main{height:100vh;height:100dvh}.topbar{height:56px;flex:0 0 56px;padding:0 16px}.capture-button{font-size:0;padding:11px 14px}.capture-button:first-letter{font-size:1rem}.shell{padding:12px 14px 76px}.welcome{flex:0 0 auto;display:block}.status-pill{display:inline-block;margin-top:10px}.welcome-actions{margin-top:10px}.today-grid{grid-template-columns:1fr;grid-template-rows:1fr 1fr}.main-column .card:not(.prompt),.side-column .card:not(.prompt){flex:1;min-height:0}.today-grid{gap:var(--space-3)}.tabs{position:fixed;top:auto;bottom:0;left:0;right:0;height:auto;flex-direction:row;justify-content:space-around;padding:8px 6px;gap:4px;z-index:5}.tabs a{width:auto;flex:1;min-width:0;height:52px;border-radius:14px}.tabs a .tab-label{font-size:.58rem}.avatar-row{margin-right:10px}.avatar-chip{width:28px;height:28px;flex:0 0 28px;font-size:.75rem}.card{padding:14px}}
+.tabs a,.capture-button,button,select{min-height:44px}
+@media (pointer:coarse){button,.tabs a{min-width:44px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+@supports (padding:max(0px)){.topbar{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}}
+[hidden]{display:none!important}
+.check.done:after{content:'\2713' !important;color:#fff;font-size:12px;position:absolute;left:3px;top:0}
+.brand,.text-link{min-height:44px;display:inline-flex;align-items:center}
+.check{width:44px;height:44px;min-width:44px;flex:0 0 44px;padding:10px}
+.check.done:after{left:15px;top:10px}
+.tabs a,.text-link{min-width:44px}

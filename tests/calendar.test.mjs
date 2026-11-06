@@ -143,7 +143,7 @@ try {
   // The shell hides "More" on desktop (reachable via the gear/menu); open it directly.
   // (On slow machines the page scripts may not be wired yet, so retry the click until the connection card is visible.)
   const privateBox = page.locator(`[data-private="${connect.id}"]`);
-  for (let attempt = 0; attempt < 15 && !(await privateBox.isVisible()); attempt++) { await page.evaluate(() => document.querySelector('.tabs a[href="#more"]')?.click()); await page.waitForTimeout(800); }
+  for (let attempt = 0; attempt < 15 && !(await privateBox.isVisible()); attempt++) { await page.evaluate(() => { document.querySelector('.tabs a[href="#more"]')?.click(); window.jdHub?.open('connect'); }); await page.waitForTimeout(800); }
   if (!(await privateBox.count())) { const info = await page.evaluate(async () => ({ hash: location.hash, grid: document.querySelector('.provider-grid')?.innerHTML.slice(0, 600) ?? 'no provider grid', more: document.querySelector('.tool-grid') ? 'tool-grid present' : 'no tool-grid', conns: await (await fetch('/api/provider-connections')).text(), reg: typeof window.__jdRegisterEnhancer })); throw new Error('connection card missing: ' + JSON.stringify(info) + ' errors: ' + pageErrors.join(' | ')); }
   await privateBox.check();
   await page.waitForFunction(() => /only busy times/.test(document.querySelector('#live-region')?.textContent ?? ''));

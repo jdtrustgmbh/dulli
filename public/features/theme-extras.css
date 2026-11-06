@@ -20,7 +20,6 @@
 /* Pill fields (spec: #f4f5f8, no border) */
 :where(.jd-more,.settings-panel,.members-panel,.school-panel,.photos-panel,dialog,.login-card) :is(input,select,textarea):not(.jd-raw):not(:where([type=checkbox],[type=radio],[type=color],[type=file],[type=range])){min-height:48px;border:0;border-radius:999px;background:var(--fill);color:var(--ink);padding:0 18px;font:inherit;font-weight:600;box-shadow:none}
 :where(.jd-more,.settings-panel,.members-panel,.school-panel,.photos-panel,dialog,.login-card) textarea{border-radius:18px;padding:12px 18px}
-:where(.jd-more,.settings-panel,.members-panel,.school-panel,.photos-panel,dialog,.login-card) select{appearance:none;-webkit-appearance:none;padding-right:42px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2366707b' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;background-size:16px;cursor:pointer}
 :where(.jd-more,.settings-panel,.members-panel,.school-panel,.photos-panel,dialog,.login-card) :is(input,select,textarea):focus-visible{outline:none;box-shadow:var(--focus-ring);background-color:var(--paper)}
 :where(.jd-more,.settings-panel,.members-panel,.school-panel,.photos-panel,dialog,.login-card) ::placeholder{color:var(--muted)}
 
@@ -52,18 +51,10 @@
 .app-shell .jd-more{display:flex;flex-direction:column;gap:6px;padding:8px 6px 24px;max-width:1180px;width:100%;margin:0 auto;overflow:auto;background:var(--paper)}
 .jd-more>.eyebrow,.jd-more>h2:not(.jd-more-title),.jd-more>.muted{display:none}
 .jd-more .jd-more-title{order:0;font-size:1.9rem;font-weight:800;margin:6px 0 4px}
-.jd-more .jd-more-profiles{order:1}
 .jd-more .tool-grid{order:2}
 .jd-more .jd-more-prefs{order:3}
 .jd-more>.language-row{order:3}
 .jd-more-section{font-size:1rem;font-weight:800;color:var(--ink);margin:18px 2px 10px;grid-column:1/-1}
-.jd-more-profile-list{list-style:none;margin:0;padding:2px 2px 6px;min-height:118px;display:flex;gap:18px;overflow-x:auto;scrollbar-width:none}
-.jd-more-profile{display:grid;justify-items:center;gap:8px;min-width:84px;padding:6px 4px;border:0;background:none;color:var(--ink);font:inherit;font-weight:700;cursor:pointer;border-radius:18px}
-.jd-more-profile:focus-visible{outline:none;box-shadow:var(--focus-ring)}
-.jd-more-avatar{display:grid;place-items:center;width:68px;height:68px;border-radius:50%;color:#fff;font-size:1.5rem;font-weight:800;background-size:cover;background-position:center;box-shadow:0 0 0 3px #fff,0 0 0 6px var(--ring,var(--line))}
-.jd-more-add .jd-more-avatar{background:var(--fill);color:var(--muted);box-shadow:inset 0 0 0 2px var(--line)}
-.jd-more-add .jd-more-avatar svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
-.jd-more-name{font-size:.9rem;max-width:110px;text-align:center;line-height:1.2;overflow-wrap:anywhere}
 
 .jd-more .tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin:0}
 .jd-more .tool-grid::before{content:none}
@@ -75,15 +66,6 @@
 .jd-more .jd-tile-label{font-size:1rem;font-weight:800;line-height:1.2}
 .jd-more .tool-grid>[data-tool="Settings"]{order:1}
 .jd-more .tool-grid>[data-jd-proxy]{order:1}
-.jd-more .tool-grid>.jd-more-providers-head{order:5}
-.jd-more .tool-grid>.provider-grid{order:6}
-.jd-more .provider-grid{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin:0}
-.jd-more .provider-card{position:relative;display:grid;grid-template-columns:auto 1fr;column-gap:14px;row-gap:4px;align-items:center;padding:16px;border:0;border-radius:22px;background:var(--fill)}
-.jd-more .provider-card>.jd-tile-ic{grid-row:1/span 2;background:var(--paper)}
-.jd-more .provider-card>:not(.jd-tile-ic){grid-column:2}
-.jd-more .provider-card strong{font-size:1rem;font-weight:800}
-.jd-more .provider-card small{color:var(--muted);font-size:.82rem}
-.jd-more .provider-card .provider-status{display:inline-flex;align-items:center;min-height:26px;padding:0 10px;border-radius:999px;background:var(--paper);color:var(--muted);font-size:.72rem;letter-spacing:.04em}
 .jd-more .provider-actions{grid-column:1/-1!important;margin-top:8px}
 .jd-more .provider-actions:has(>.provider-status:only-child){margin-top:0}
 .jd-more .provider-actions button{min-height:44px;border:0;border-radius:999px;background:var(--paper);color:var(--ink);font-weight:800;padding:0 18px}
@@ -175,13 +157,7 @@ body.jd-view-today .app-shell .welcome{padding:8px 4px 4px;margin-bottom:10px}
 /* ================= (5) School timetable ================= */
 .app-shell .shell>.school-panel{padding:8px 4px 24px;overflow:auto}
 .school-panel>.card-heading>.muted{display:inline-flex;align-items:center;min-height:36px;padding:0 14px;border-radius:999px;background:var(--teal-tint);color:var(--teal-strong);font-weight:800}
-.school-panel .school-form{grid-template-columns:repeat(5,minmax(0,1fr)) auto;gap:10px;padding:12px;border-radius:26px;background:var(--fill);align-items:end}
-.school-panel .school-form label{color:var(--muted);font-weight:700;font-size:.8rem;padding-left:6px}
-.app-shell .school-panel .school-form :is(input,select){background-color:var(--paper);min-height:46px}
-.school-panel .school-form .primary-button{grid-column:auto;align-self:end;white-space:nowrap}
 .school-panel .school-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:0;margin-top:18px;border-radius:20px;overflow:visible;flex:none;min-height:auto}
-.school-panel .school-form{flex:none}
-@media (max-width:1100px) and (min-width:761px){.school-panel .school-form{grid-template-columns:repeat(3,minmax(0,1fr))}.school-panel .school-form .primary-button{grid-column:auto}}
 .school-panel .school-day{align-content:start;gap:8px;min-height:340px;padding:0 6px 10px;border:0;border-left:1px solid var(--line);border-radius:0;background:var(--paper)}
 .school-panel .school-day:first-child{border-left:0}
 .school-panel .jd-day-head{display:block;padding:10px 4px;margin:0 -6px 4px;text-align:center;font-weight:800;color:var(--ink);border-bottom:1px solid var(--line)}
@@ -190,9 +166,30 @@ body.jd-view-today .app-shell .welcome{padding:8px 4px 4px;margin-bottom:10px}
 .school-panel .school-day article b{font-weight:800;font-size:.95rem;padding-right:22px}
 .school-panel .school-day article small{color:var(--muted);font-size:.78rem}
 .school-panel .school-day .school-child{display:none}
-.jd-lesson-badge{position:absolute;right:8px;top:8px;display:grid;place-items:center;width:20px;height:20px;border-radius:6px;background:var(--paper);color:var(--muted);font-size:.7rem;font-weight:800}
-.school-panel .school-day .inline-actions{display:flex;justify-content:flex-start;gap:6px;margin-top:4px}
-.school-panel .school-day .module-action{min-height:40px;padding:0 10px;font-size:.75rem!important;border:0;border-radius:999px;background:rgba(255,255,255,.75);color:var(--ink);font-weight:700;font-size:.8rem;cursor:pointer}
+.school-panel .school-day .jd-lesson-edit{position:absolute;top:6px;right:6px;display:grid;place-items:center;width:28px;height:28px;min-width:28px;min-height:28px;padding:0;border:0;border-radius:50%;background:var(--paper);color:var(--muted);cursor:pointer;box-shadow:var(--shadow-sm)}
+.school-panel .school-day .jd-lesson-edit:hover{color:var(--ink)}
+.school-panel .card-heading{align-items:center}
+.jd-school-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.jd-school-tabs:empty{display:none}
+.jd-school-tab{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 16px;border:0;border-radius:999px;background:var(--fill);color:var(--muted);font-weight:700;cursor:pointer}
+.jd-school-tab i{width:10px;height:10px;border-radius:50%}
+.jd-school-tab[aria-selected=true]{background:var(--btn-primary,var(--teal));color:var(--btn-primary-ink,#fff)}
+.jd-school-tab:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.jd-lesson-add{display:grid;place-items:center;flex:none;width:40px;height:40px;min-width:40px;min-height:40px;padding:0;border:0;border-radius:50%;background:var(--btn-primary,var(--teal));color:var(--btn-primary-ink,#fff);font-size:1.6rem;font-weight:700;line-height:1;cursor:pointer;box-shadow:var(--shadow-sm)}
+.jd-lesson-add:hover{filter:brightness(.95)}
+.jd-lesson-add:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.school-panel .school-day article b{padding-right:34px}
+dialog.jd-lesson-dialog{width:min(440px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto}
+.jd-lesson-form{position:relative}
+.jd-lesson-form label{display:block}
+.jd-lesson-form :is(input:not([type=color]):not([type=checkbox]),select){display:block;width:100%;margin-top:6px}
+.jd-lesson-color{display:flex;align-items:center;gap:12px;margin-top:16px}
+.jd-lesson-color label{margin:0}
+.jd-lesson-color input[type=color]{width:56px;height:44px;padding:2px;border:1px solid var(--line);border-radius:12px;background:var(--paper);cursor:pointer}
+.jd-lesson-form .jd-lesson-all{display:flex;align-items:center;gap:10px;margin:12px 0 0;font-weight:600}
+.jd-lesson-form .jd-lesson-all input{width:20px;height:20px;margin:0;flex:none}
+.jd-lesson-form .inline-actions{margin-top:22px}
+.jd-lesson-form .inline-actions .jd-btn.danger{flex:0 0 auto}
 
 /* ================= (6) Dialogs & sheets ================= */
 dialog{border:0;border-radius:26px;background:var(--paper);color:var(--ink);box-shadow:var(--shadow-lg);max-width:min(480px,calc(100vw - 24px))}
@@ -310,9 +307,6 @@ body:has(.marketing){background:var(--paper)}
   .jd-more .tool-grid>.jd-tile{min-height:108px;padding:12px;gap:12px;border-radius:20px}
   .jd-more .jd-tile .jd-tile-ic{width:42px;height:42px;border-radius:14px}
   .jd-more .jd-tile-label{font-size:.85rem;hyphens:auto;overflow-wrap:anywhere}
-  .jd-more .provider-grid{grid-template-columns:1fr}
-  .jd-more-avatar{width:58px;height:58px}
-  .jd-more-profile{min-width:70px}
   .app-shell .shell>:is(.settings-panel,.members-panel,.school-panel,.photos-panel){padding-bottom:110px}
   .app-shell .shell>.settings-panel{border-radius:22px;padding:16px 10px 110px}
   :is(.settings-panel,.members-panel,.school-panel,.photos-panel)>.card-heading{flex-wrap:wrap}
@@ -326,8 +320,6 @@ body:has(.marketing){background:var(--paper)}
   .members-panel .member-form input{flex-basis:100%}
   .members-panel .member-form .primary-button{flex:1}
   .members-panel .jd-rename{flex-wrap:wrap}
-  .school-panel .school-form{grid-template-columns:1fr 1fr;border-radius:22px}
-  .school-panel .school-form .primary-button{grid-column:1/-1}
   .school-panel .school-grid{grid-template-columns:1fr;border-radius:0;gap:10px}
   .school-panel .school-day{min-height:0;border:0;border-radius:20px;background:var(--fill);padding:0 10px 10px}
   .school-panel .jd-day-head{text-align:left;margin:0 -10px 4px;padding:12px 12px 8px;border-bottom:0}
@@ -350,8 +342,6 @@ body:has(.marketing){background:var(--paper)}
 .shared-display .display-controls a{text-decoration:none}
 .marketing h1{letter-spacing:-.04em}
 dialog .primary-button{margin-top:16px}
-.school-panel .school-day .inline-actions{justify-content:flex-start!important;margin-left:0!important}
-.school-panel .school-day .inline-actions .module-action{margin:0!important}
 
 /* CalDAV connect dialog */
 .jd-caldav-dialog{border:0;border-radius:var(--radius-xl,24px);padding:24px;box-shadow:var(--shadow-lg,0 18px 50px rgba(0,0,0,.3));width:min(440px,calc(100vw - 32px));background:var(--paper,#fff);color:var(--ink,#042F57)}

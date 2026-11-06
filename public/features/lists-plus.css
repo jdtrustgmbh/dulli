@@ -127,12 +127,6 @@
 .lp-sort button[aria-pressed="true"]{background:var(--paper);color:var(--ink);box-shadow:var(--shadow-sm)}
 
 /* ---------- Today card: mini tiles ---------- */
-.lp-today .lp-today-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px}
-.lp-today .lp-today-item{display:block;min-height:0;padding:0;border:0}
-.lp-today .lp-check{display:flex;flex-direction:column;align-items:center;gap:2px;width:100%;min-height:88px;padding:8px 6px;border:0;border-radius:16px;background:var(--lp-tile);color:var(--ink);font:inherit;cursor:pointer}
-.lp-today .lp-tile-emoji{font-size:1.7rem;padding:2px 0}
-.lp-today .lp-title-text{font-size:.8rem;font-weight:800;overflow-wrap:anywhere;text-align:center}
-.lp-today .lp-check small{color:var(--muted);font-size:.7rem;font-weight:700}
 .lp-count-big{color:var(--teal)}
 
 @media (max-width:760px){

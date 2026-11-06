@@ -225,7 +225,6 @@ button.cal-range-pill:hover{background:var(--cal-chip);color:var(--ink)}
 .cal-editor .jd-field{display:grid;gap:6px;font-size:.8rem;font-weight:700;color:var(--muted)}
 .cal-editor .jd-field input,.cal-editor .jd-field select,.cal-editor .jd-field textarea{width:100%;min-height:46px;padding:0 18px;border:0;border-radius:999px;background:var(--cal-chip);color:var(--ink);font:inherit;font-size:.95rem;font-weight:600;box-sizing:border-box}
 .cal-editor .jd-field textarea{min-height:84px;padding:12px 18px;border-radius:20px;resize:vertical}
-.cal-editor .jd-field select{appearance:none;-webkit-appearance:none;padding-right:42px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a94a0' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;background-size:16px}
 .cal-editor .jd-field input[name="title"]{font-size:1.05rem;font-weight:700}
 .cal-editor .jd-switch{display:flex;align-items:center;justify-content:space-between;min-height:46px;padding:0 8px 0 18px;border-radius:999px;background:var(--cal-chip);font-size:.95rem;font-weight:700;color:var(--ink)}
 .cal-editor .jd-switch input{appearance:none;-webkit-appearance:none;position:relative;width:48px;height:28px;margin:0;border-radius:999px;background:var(--fill-3);cursor:pointer;transition:background .15s}

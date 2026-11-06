@@ -12,6 +12,8 @@ export function createReminderStore() {
 }
 
 // --- optional-modules ---
+// A lesson colour is a #rrggbb string, or '' for the default colour of the subject.
+const schoolColor = value => (/^#[0-9a-fA-F]{6}$/.test(String(value ?? '')) ? String(value).toLowerCase() : '');
 export function createOptionalModules() {
   const rewardLedger = []; const meals = []; const school = [];
   const balance = member => rewardLedger.filter(entry => entry.member === member).reduce((total, entry) => total + entry.points, 0);
@@ -21,8 +23,8 @@ export function createOptionalModules() {
     ledger() { return rewardLedger.map(entry => ({ ...entry, balance: balance(entry.member) })); },
     redeem(member, reward, cost, id = `redemption-${Date.now()}-${rewardLedger.length}`) { if (balance(member) < Number(cost)) throw new Error('INSUFFICIENT_REWARD_BALANCE'); const entry = { id, member, points: -Number(cost), reason: `redemption: ${reward}`, kind: 'redeem', status: 'pending_approval', at: new Date().toISOString() }; rewardLedger.push(entry); return { ...entry, balance: balance(member) }; },
     addMeal({ day, title, servings = 1, ingredients = '', notes = '' }) { const meal = { day, title, servings, ingredients, notes }; meals.push(meal); return meal; }, meals() { return [...meals]; },
-    addSchoolEntry({ child, weekday = 'Monday', title, startsAt, room = '', recurring = false, id = `school-${Date.now()}-${school.length}` }) { const entry = { id, child, weekday, title, startsAt, room, recurring }; school.push(entry); return entry; }, school() { return [...school]; },
-    updateSchoolEntry(id, patch) { const entry = school.find(item => item.id === id); if (!entry) return null; Object.assign(entry, patch); return entry; },
+    addSchoolEntry({ child, weekday = 'Monday', title, startsAt, room = '', recurring = false, color = '', id = `school-${Date.now()}-${school.length}` }) { const entry = { id, child, weekday, title, startsAt, room, recurring, color: schoolColor(color) }; school.push(entry); return entry; }, restoreSchool(entries) { school.length = 0; for (const entry of Array.isArray(entries) ? entries : []) if (entry && typeof entry === 'object' && entry.id && entry.child && entry.title) school.push({ ...entry, color: schoolColor(entry.color) }); }, school() { return [...school]; },
+    updateSchoolEntry(id, patch) { const entry = school.find(item => item.id === id); if (!entry) return null; const { child, weekday, title, startsAt, room, recurring, color } = patch; Object.assign(entry, Object.fromEntries(Object.entries({ child, weekday, title, startsAt, room, recurring }).filter(([, value]) => value !== undefined))); if (color !== undefined) entry.color = schoolColor(color); return entry; },
     deleteSchoolEntry(id) { const index = school.findIndex(item => item.id === id); if (index === -1) return false; school.splice(index, 1); return true; }
   };
 }

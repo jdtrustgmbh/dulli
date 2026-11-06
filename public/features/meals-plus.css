@@ -35,7 +35,7 @@
 /* ---------- Week grid ---------- */
 .mp-scroll{flex:1;min-height:0;overflow:auto}
 .mp-week{display:grid;grid-template-columns:28px repeat(7,minmax(0,1fr));gap:10px;height:100%;min-height:420px}
-.mp-day,.mp-gutter{display:grid;grid-template-rows:36px repeat(3,minmax(92px,1fr));gap:10px;min-width:0;min-height:0}
+.mp-day,.mp-gutter{display:grid;grid-template-rows:36px repeat(var(--mp-slots,3),minmax(92px,1fr));gap:10px;min-width:0;min-height:0}
 .mp-day-head{display:flex;align-items:center;justify-content:center}
 .mp-day-pill{display:inline-flex;align-items:center;gap:3px;min-height:28px;padding:0 14px;border-radius:999px;color:var(--muted);font-weight:700;font-size:.9rem;white-space:nowrap}
 .mp-day.is-today .mp-day-pill{background:var(--coral);color:#fff}
@@ -168,6 +168,8 @@
 .mp-today-list .mp-thumb.small{width:44px;height:44px}
 .mp-today-list .mp-thumb.small .mp-emojis{font-size:1.6rem;max-width:2.3em}
 .mp-today-list .mp-thumb.small .mp-photo{width:44px;height:44px;border-radius:12px}
+.mp-today-list .mp-thumb{width:auto;height:auto;min-height:36px}
+.mp-today-list .mp-thumb .mp-emojis{display:flex!important;flex-wrap:nowrap;max-width:none;font-size:1.6rem;gap:.08em}
 .mp-today-list small{display:block;color:var(--muted);font-size:.72rem;font-weight:700}
 .mp-today-list strong{font-size:.85rem;overflow-wrap:anywhere}
 
@@ -180,7 +182,7 @@
   .mp-head-right .mp-pill-btn{flex:1}
   .mp-scroll{overflow:visible;flex:0 0 auto}
   .mp-week{grid-template-columns:1fr;height:auto;min-height:0;gap:8px}
-  .mp-day,.mp-gutter{grid-template-columns:48px repeat(3,minmax(0,1fr));grid-template-rows:auto;gap:8px}
+  .mp-day,.mp-gutter{grid-template-columns:48px repeat(var(--mp-slots,3),minmax(0,1fr));grid-template-rows:auto;gap:8px}
   .mp-gutter{position:sticky;top:0;z-index:1;background:var(--paper);padding:2px 0}
   .mp-gutter-cell{flex-direction:row;gap:4px}
   .mp-gutter-label{writing-mode:horizontal-tb;transform:none;font-size:.66rem}

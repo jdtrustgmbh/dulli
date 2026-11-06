@@ -490,6 +490,21 @@
   };
   // Jump from a header avatar to the Tasks board, filtered to that person.
   const showMember = owner => { if (state.members.includes(owner)) state.filter = owner; document.querySelector('.tabs a[href="#tasks"]')?.click(); };
-  window.jdTasks = { todayCounts, showMember, refresh, toggle: (id, date = new Date()) => { const task = state.tasks.find(item => item.id === id); return task ? toggle(task, date) : null; }, balanceOf, dayKey };
+  // Streak = consecutive days on which a person did at least one task and left no scheduled recurring task open.
+  // A task only counts against a day once the person has finished it at least once (so newly added tasks do not break old days).
+  const streakOf = member => {
+    if (!state.loaded) return 0;
+    const completions = taskMeta().completions;
+    const mine = state.tasks.filter(task => task.owner === member).map(task => { const record = completions[task.id] ?? {}; return { task, record, first: Object.keys(record).filter(k => record[k]).sort()[0] }; });
+    const perfect = date => {
+      const key = dayKey(date); let done = 0;
+      for (const { task, record, first } of mine) { if (record[key]) { done += 1; continue; } if (task.recurrence && first && first <= key && scheduledOn(task, date)) return false; }
+      return done > 0;
+    };
+    const date = new Date(); if (!perfect(date)) date.setDate(date.getDate() - 1);
+    let days = 0; while (days < 400 && perfect(date)) { days += 1; date.setDate(date.getDate() - 1); }
+    return days;
+  };
+  window.jdTasks = { todayCounts, streakOf, showMember, refresh, toggle: (id, date = new Date()) => { const task = state.tasks.find(item => item.id === id); return task ? toggle(task, date) : null; }, balanceOf, dayKey };
   if (location.hash === '#tasks') setTimeout(() => window.jdOpenTasksBoard(), 50);
 })();

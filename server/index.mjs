@@ -4,7 +4,9 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { randomUUID, randomBytes, createHash } from 'node:crypto';
 import { AsyncLocalStorage } from 'node:async_hooks';
+import { brotliCompressSync, gzipSync, constants as zlibConstants } from 'node:zlib';
 import { parseCapture } from './stores.mjs';
+import { buildBundle } from './bundles.mjs';
 import { PROVIDERS } from './calendar-providers.mjs';
 import { googleConfigured, microsoftConfigured, buildGoogleAuthUrl, exchangeGoogleCode, refreshGoogleToken, fetchGoogleEvents, fetchGoogleAccountInfo, buildMicrosoftAuthUrl, exchangeMicrosoftCode, refreshMicrosoftToken, fetchMicrosoftEvents, fetchMicrosoftAccountInfo, fetchIcsEvents } from './calendar-providers.mjs';
 import { createAuthStore, hashPassword, verifyPassword } from './auth.mjs';
@@ -171,6 +173,20 @@ if (auth.accounts.size === 0) {
 }
 
 const escapeHtml = value => String(value ?? '').replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]));
+// Link previews: every public page carries Open Graph / Twitter tags with an absolute image URL (crawlers do not resolve relative ones).
+const NO_PREVIEW = new Set(['/styleguide.html', '/display.html']);
+function withSocialTags(html, req, pathname) {
+  if (NO_PREVIEW.has(pathname)) return html;
+  const proto = String(req.headers['x-forwarded-proto'] ?? (req.socket?.encrypted ? 'https' : 'http')).split(',')[0].trim();
+  const host = String(process.env.PUBLIC_HOST || req.headers['x-forwarded-host'] || req.headers.host || 'localhost').split(',')[0].trim();
+  const origin = `${/^https?$/.test(proto) ? proto : 'https'}://${host}`;
+  const image = origin + '/assets/brand/dulli-og-1200x630.png';
+  if (html.includes('property="og:image"')) return html.replace('content="/assets/brand/dulli-og-1200x630.png"', `content="${escapeHtml(image)}"`);
+  const title = html.match(/<title>([^<]*)<\/title>/)?.[1] ?? 'Dulli';
+  const description = html.match(/<meta name="description" content="([^"]*)"/)?.[1] ?? 'Dulli bringt Termine, Aufgaben und Einkaufslisten eurer Familie in eine klare Tagesansicht.';
+  const tags = `<meta property="og:type" content="website"><meta property="og:site_name" content="Dulli"><meta property="og:title" content="${title}"><meta property="og:description" content="${description}"><meta property="og:url" content="${escapeHtml(origin + pathname)}"><meta property="og:image" content="${escapeHtml(image)}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${title}"><meta name="twitter:description" content="${description}"><meta name="twitter:image" content="${escapeHtml(image)}">`;
+  return html.replace('</title>', '</title>' + tags);
+}
 const PUBLIC_EXTENSIONS = new Set(['.html', '.css', '.js', '.webmanifest', '.svg', '.png', '.jpg', '.jpeg', '.webp', '.ico', '.ttf', '.woff2']);
 function isPublicAsset(requested) {
   if (requested.includes('%') || requested.includes('\\') || requested.includes('..') || requested.includes('\0')) return false;
@@ -178,6 +194,25 @@ function isPublicAsset(requested) {
   if (!segments.length || segments.some(segment => segment.startsWith('.'))) return false;
   if (!PUBLIC_EXTENSIONS.has(extname(requested).toLowerCase())) return false;
   return true; // everything below public/ is meant to be served
+}
+// Static files: text assets are sent compressed (brotli/gzip, cached in memory) with an ETag, so a reload revalidates with
+// a tiny 304 and a hard reload downloads a fraction of the bytes. Cache-Control stays no-cache: a deploy is picked up at once.
+const compressedAssets = new Map();
+function sendStatic(req, res, content, type) {
+  const hash = createHash('sha1').update(content).digest('base64url').slice(0, 22);
+  const accept = String(req.headers['accept-encoding'] ?? '');
+  const compressible = content.length > 1024 && /^(text\/|application\/(json|manifest\+json)|image\/svg)/.test(type);
+  const encoding = compressible ? (/\bbr\b/.test(accept) ? 'br' : /\bgzip\b/.test(accept) ? 'gzip' : '') : '';
+  const etag = `"${hash}${encoding ? `-${encoding}` : ''}"`;
+  const headers = { 'Cache-Control': 'no-cache', ETag: etag, Vary: 'Accept-Encoding' };
+  if (req.headers['if-none-match'] === etag) { res.writeHead(304, headers); return res.end(); }
+  let body = content;
+  if (encoding) {
+    if (!compressedAssets.has(etag)) { if (compressedAssets.size > 400) compressedAssets.clear(); compressedAssets.set(etag, encoding === 'br' ? brotliCompressSync(content, { params: { [zlibConstants.BROTLI_PARAM_QUALITY]: 5 } }) : gzipSync(content)); }
+    body = compressedAssets.get(etag); headers['Content-Encoding'] = encoding;
+  }
+  res.writeHead(200, { 'Content-Type': type, 'Content-Length': body.length, ...headers });
+  res.end(body);
 }
 const securityHeaders ={ 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'DENY', 'Referrer-Policy': 'strict-origin-when-cross-origin', 'Permissions-Policy': 'camera=(), microphone=(), geolocation=()' };
 async function json(res, status, body, extraHeaders = {}) { await persistState().catch(error => console.error('[persist failed]', error?.message ?? error)); res.writeHead(status, { ...securityHeaders, 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', ...extraHeaders }); res.end(JSON.stringify(body)); }
@@ -459,7 +494,7 @@ async function handleRequest(req, res) {
   if (url.pathname === '/api/extras' && req.method === 'GET') return json(res, 200, bundle.extras);
   const extrasMatch = url.pathname.match(/^\/api\/extras\/([a-zA-Z]+)$/);
   if (extrasMatch && req.method === 'PUT') {
-    const EXTRA_KEYS = ['settings', 'taskMeta', 'coins', 'treasures', 'recipes', 'mealPlan', 'listMeta', 'photoFrame', 'childLock', 'profiles', 'holidays', 'calendarMeta'];
+    const EXTRA_KEYS = ['settings', 'taskMeta', 'coins', 'treasures', 'recipes', 'mealPlan', 'listMeta', 'photoFrame', 'childLock', 'profiles', 'streaks', 'mealSettings', 'holidays', 'calendarMeta'];
     if (!EXTRA_KEYS.includes(extrasMatch[1])) return json(res, 404, { error: 'unknown_extra' });
     let body = ''; for await (const chunk of req) { body += chunk; if (body.length > 6_000_000) return json(res, 413, { error: 'too_large' }); }
     try { bundle.extras[extrasMatch[1]] = JSON.parse(body); household.version += 1; household.updatedAt = new Date().toISOString(); return json(res, 200, bundle.extras[extrasMatch[1]]); } catch { return json(res, 400, { error: 'invalid_json' }); }
@@ -470,10 +505,12 @@ async function handleRequest(req, res) {
   const requested = url.pathname === '/app' ? '/index.html' : url.pathname === '/login' ? '/login.html' : url.pathname === '/join' ? '/join.html' : url.pathname === '/signup' ? '/signup.html' : url.pathname === '/styleguide' ? '/styleguide.html' : url.pathname === '/favicon.ico' ? '/assets/brand/favicon.ico' : url.pathname === '/apple-touch-icon.png' ? '/assets/brand/apple-touch-icon.png' : url.pathname;
   // Static files come from an allowlist only: public web assets in the root and /f/. Server code, state
   // files (/data), docs, tests and dependencies must never be reachable over HTTP.
+  const bundled = await buildBundle(root, requested).catch(() => null);
+  if (bundled) return sendStatic(req, res, bundled.content, bundled.type);
   if (!isPublicAsset(requested)) { res.writeHead(404, securityHeaders); return res.end('Not found'); }
   const path = normalize(join(root, requested));
   if (!path.startsWith(root)) return json(res, 403, { error: 'forbidden' });
-  try { let content = await readFile(path);  res.writeHead(200, { 'Content-Type': contentTypes[extname(path)] ?? 'text/plain; charset=utf-8', 'Cache-Control': 'no-cache' }); res.end(content); }
+  try { let content = await readFile(path); if (extname(path) === '.html') content = withSocialTags(content.toString('utf8'), req, requested); sendStatic(req, res, content, contentTypes[extname(path)] ?? 'text/plain; charset=utf-8'); }
   catch { res.writeHead(404); res.end('Not found'); }
 }
 

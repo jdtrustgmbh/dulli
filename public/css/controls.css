@@ -4,6 +4,7 @@
   --fog-50:#f6f8fa;--fog-100:#eef2f6;--fog-200:#e2e8ee;--fog-300:#d3dce5;--fog-500:#8a9aaa;
   --info:#2f80ed;--info-tint:#e5f1fd;--success:#2f9e44;--success-tint:#e7f6e4;--warn:#9a6b00;--warn-tint:#fff3d1;--danger:#c62b3a;--danger-tint:#ffe6e9;
   --ctl-radius:12px;--ctl-height:46px;
+  --ctl-chevron:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2366707b' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   --btn-primary:#042F57;--btn-primary-ink:#fff;--btn-primary-hover:#0d4577;
   --fill:#f4f5f8;--fill-soft:#f7f8fa;--fill-2:#e9ecf3;--fill-3:#e3e7ec;
   --ctl-ring:0 0 0 3px var(--paper),0 0 0 5px var(--brand-teal,#00A6A9);
@@ -36,6 +37,9 @@ html body :is(.tabs-fab,.calendar-week-panel .cal-new,.tb-add-wide){background:v
 /* ---- Text inputs ---- */
 html body :is(input,select,textarea):not(.jd-raw):not([type=checkbox]):not([type=radio]):not([type=color]):not([type=file]):not([type=range]){
   min-height:var(--ctl-height);border:1.5px solid var(--fog-300);border-radius:10px;background-color:var(--paper);color:var(--ink);padding:0 14px;font:inherit;font-weight:600;box-shadow:none}
+/* Dropdown: every single-choice select shows a chevron on the right, whatever component styles its box. Opt out with .jd-raw. Spec: /styleguide "Dropdown". */
+html body select:not(.jd-raw):not([multiple]):not([size]){appearance:none;-webkit-appearance:none;padding-right:44px!important;background-image:var(--ctl-chevron);background-repeat:no-repeat;background-position:right 16px center;background-size:16px;cursor:pointer;text-overflow:ellipsis}
+html body select:not(.jd-raw):not([multiple]):not([size]):disabled{cursor:not-allowed;opacity:.6}
 html body textarea:not(.jd-raw){border-radius:12px;padding:12px 14px;min-height:96px}
 html body :is(input,select,textarea)::placeholder{color:var(--fog-500);font-weight:500}
 html body :is(input,select,textarea):not(.jd-raw):not([type=checkbox]):not([type=radio]):hover{border-color:var(--brand-teal,#00A6A9)}

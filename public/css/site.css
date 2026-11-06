@@ -1,3 +1,26 @@
+/* Stylesheet of the stand-alone pages (login, signup, join, display, legal, landing, styleguide): brand constants + base. The app itself uses the split files in /dulli.css. */
+/* Dulli brand layer — logos and brand constants. Rules: docs/design.md */
+:root{
+  --brand-navy:#042F57;
+  --brand-teal:#00A6A9;
+  --brand-coral:#FE4758;
+  --brand-sun:#FFBC00;
+  --brand-green:#63C742;
+  --brand-cream:#FCFAF6;
+}
+.brand{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--brand-navy)}
+.brand-logo{display:block;height:44px;width:auto}
+.brand-symbol{display:none;height:40px;width:40px;border-radius:12px}
+.brand-logo--stacked{height:auto;width:150px;max-width:60%}
+.app-shell .topbar .brand-logo{height:46px}
+.shared-display .brand-logo{height:52px}
+.marketing .brand-logo{height:52px}
+body.jd-login .brand,.marketing .brand{font-weight:800}
+body.jd-login .login-card .brand{display:flex;justify-content:center;margin-bottom:12px!important}
+body.jd-login .login-card .brand-logo--stacked{width:140px}
+.legal-top .brand-logo{height:44px}
+body.jd-login .login-card a:not(.brand){color:var(--teal)}
+
 :root{
   /* Color */
   --ink:#042F57;--muted:#5a6b7d;--line:#e3e8ec;--paper:#fff;--bg:#FCFAF6;

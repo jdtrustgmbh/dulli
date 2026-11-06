@@ -45,6 +45,8 @@ try {
   server.kill(); server = await start(port, { SIGNUP_CODE: 'friends-secret-code', SIGNUP_LIMIT: '5' }); base = `http://127.0.0.1:${port}`;
   const context = await browser.newContext({ locale: 'de-DE', serviceWorkers: 'block' });
   const page = await context.newPage();
+  // device was already set up with another account: the wizard must still start for the new household
+  await page.goto(`${base}/login`); await page.evaluate(() => localStorage.setItem('jd-activated', 'true'));
   await page.goto(`${base}/signup?code=friends-secret-code`);
   await page.fill('#signup-email', 'neu@example.com'); await page.fill('#signup-password', 'password-123');
   await Promise.all([page.waitForURL('**/app'), page.click('button[type=submit]')]);

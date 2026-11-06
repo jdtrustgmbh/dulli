@@ -180,6 +180,11 @@
     document.querySelectorAll(PANEL_SELECTOR).forEach(el => { el.hidden = true; });
     document.querySelectorAll('.shell > section.card[class*="-panel"]').forEach(el => { if (el !== panel) el.hidden = true; });
     document.querySelector('.today-grid')?.setAttribute('hidden', '');
+    // Tasks and Lists render into .module-view; without hiding it, Settings would appear below that content.
+    document.querySelectorAll('.module-view').forEach(el => { el.hidden = true; });
+    document.querySelector('.greeting-block')?.setAttribute('hidden', '');
+    document.querySelector('.shell')?.classList.remove('shell-wide');
+    document.querySelectorAll('.tabs a.active').forEach(el => el.classList.remove('active'));
     if (!panel) { panel = document.createElement('section'); panel.className = 'card settings-panel'; document.querySelector('.shell')?.append(panel); }
     panel.hidden = false; render(); panel.scrollIntoView?.({ block: 'start' });
   }

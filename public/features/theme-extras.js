@@ -13,6 +13,7 @@
     gear: svg('<circle cx="12" cy="12" r="3"/><path d="M19.4 14.6a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1v.2a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-2.7-1.1l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0-1.1-2.7H3.5a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.1-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 2.7-1.1V3.5a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7h.1a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.4 1z"/>'),
     school: svg('<path d="M2.5 9.5 12 5l9.5 4.5L12 14z"/><path d="M6.5 11.5V16c0 1.4 2.5 2.8 5.5 2.8s5.5-1.4 5.5-2.8v-4.5M21.5 9.5V15"/>'),
     link: svg('<rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4M12 13v5M9.5 15.5h5"/>'),
+    frame: svg('<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.8"/>'),
     share: svg('<path d="M12 3.5v11M8 7.5l4-4 4 4"/><path d="M5 12.5v5a2.5 2.5 0 0 0 2.5 2.5h9a2.5 2.5 0 0 0 2.5-2.5v-5"/>'),
     globe: svg('<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.4 2.4 3.5 5.2 3.5 8.5s-1.1 6.1-3.5 8.5c-2.4-2.4-3.5-5.2-3.5-8.5s1.1-6.1 3.5-8.5z"/>'),
     moon: svg('<path d="M19.5 14.5A8 8 0 0 1 9.5 4.5a8 8 0 1 0 10 10z"/>'),
@@ -30,23 +31,26 @@
   };
   window.jdIcons = ICONS;
 
-  window.jdI18nExtend?.({ 'Settings': 'Einstellungen', 'Connect calendar': 'Kalender verbinden', 'Share & export': 'Teilen & Export', 'Display & language': 'Anzeige & Sprache', 'Add profile': 'Profil hinzufügen', 'Profiles': 'Profile', 'Good morning': 'Guten Morgen', 'Good afternoon': 'Guten Tag', 'Good evening': 'Guten Abend', 'TODAY': 'HEUTE' });
+  window.jdI18nExtend?.({ 'Settings': 'Einstellungen', 'Connect calendar': 'Kalender verbinden', 'Frames': 'Rahmen', 'Timetables': 'Stundenpläne', 'Recommend Dulli': 'Dulli weiterempfehlen', 'Display & language': 'Anzeige & Sprache', 'Add profile': 'Profil hinzufügen', 'Profiles': 'Profile', 'Good morning': 'Guten Morgen', 'Good afternoon': 'Guten Tag', 'Good evening': 'Guten Abend', 'TODAY': 'HEUTE' });
 
   // [data-tool] -> [icon, pastel, English label]. Tiles are re-decorated after other modules rewrite their text.
+  // Rewards and Meals keep their (hidden) buttons because the bottom tabs open those pages through them; they are not tiles here.
   const TOOLS = {
-    Family: ['family', 'rose', 'Family'], Rewards: ['treasure', 'sun', 'Treasures'], Meals: ['meals', 'peach', 'Meals'],
-    Photos: ['photos', 'sky', 'Photos'], 'Shared display': ['display', 'lav', 'Shared display'], 'Smart capture': ['sparkle', 'mint', 'Smart capture'],
-    Settings: ['gear', 'grey', 'Settings']
+    Family: ['family', 'rose', 'Family'], Photos: ['photos', 'sky', 'Photos'], Settings: ['gear', 'grey', 'Settings']
   };
+  const HIDDEN_TOOLS = ['Rewards', 'Meals'];
   const PROXIES = [
-    { key: 'school', icon: 'school', tone: 'teal', label: 'School', run: () => document.querySelector('.tabs a[href="#school"]')?.click() },
-    { key: 'connect', icon: 'link', tone: 'sky', label: 'Connect calendar', run: () => { const el = document.querySelector('.jd-more-providers'); el?.scrollIntoView({ behavior: 'smooth', block: 'start' }); el?.querySelector('button')?.focus({ preventScroll: true }); } },
-    { key: 'share', icon: 'share', tone: 'mint', label: 'Share & export', run: () => { document.querySelector('.tool-grid [data-tool="Settings"]')?.click(); setTimeout(() => { const b = document.querySelector('.settings-panel [data-export]'); b?.scrollIntoView({ behavior: 'smooth', block: 'center' }); b?.focus({ preventScroll: true }); }, 250); } }
+    { key: 'frames', icon: 'frame', tone: 'sun', label: 'Frames', run: () => window.jdHub?.open('frames') },
+    { key: 'meals', icon: 'meals', tone: 'peach', label: 'Meals', run: () => window.jdHub?.open('meals') },
+    { key: 'school', icon: 'school', tone: 'teal', label: 'Timetables', run: () => window.jdHub?.open('school') },
+    { key: 'connect', icon: 'link', tone: 'sky', label: 'Connect calendar', run: () => window.jdHub?.open('connect') },
+    { key: 'share', icon: 'share', tone: 'mint', label: 'Recommend Dulli', run: () => window.jdHub?.open('share') }
   ];
   const tileInner = (icon, label) => `<span class="jd-tile-ic" aria-hidden="true">${ICONS[icon]}</span><span class="jd-tile-label">${label}</span>`;
 
   function decorateTiles(grid) {
     grid.querySelectorAll(':scope > [data-tool]').forEach(button => {
+      if (HIDDEN_TOOLS.includes(button.dataset.tool)) { button.hidden = true; return; }
       const spec = TOOLS[button.dataset.tool]; if (!spec) return;
       button.classList.add('jd-tile'); button.dataset.tone = spec[1];
       if (!button.querySelector('.jd-tile-ic')) { button.innerHTML = tileInner(spec[0], spec[2]); button.removeAttribute('data-i18n-skip'); }
@@ -58,48 +62,6 @@
       button.addEventListener('click', proxy.run);
       grid.append(button);
     }
-    const providers = grid.querySelector('[data-provider-grid]');
-    if (providers && !grid.querySelector('.jd-more-providers-head')) {
-      const head = document.createElement('h3'); head.className = 'jd-more-section jd-more-providers-head'; head.textContent = 'Connect calendar';
-      grid.append(head);
-    }
-    providers?.classList.add('jd-more-providers');
-    providers?.querySelectorAll('.provider-card').forEach(card => { if (!card.querySelector('.jd-tile-ic')) card.insertAdjacentHTML('afterbegin', `<span class="jd-tile-ic" data-tone="sky" aria-hidden="true">${ICONS.link}</span>`); });
-  }
-
-  const memberColor = name => window.jdMemberColor?.(name) ?? 'var(--teal)';
-  let profileSig = '';
-  async function renderProfiles(card) {
-    let strip = card.querySelector('.jd-more-profiles');
-    if (!strip) {
-      strip = document.createElement('div'); strip.className = 'jd-more-profiles';
-      strip.innerHTML = '<h3 class="jd-more-section">Profiles</h3><ul class="jd-more-profile-list"></ul>';
-      card.querySelector('.jd-more-title')?.after(strip);
-    }
-    // Reuse the topbar avatar chips (photo/color already resolved by profiles-plus).
-    const chips = [...document.querySelectorAll('.topbar .avatar-row .avatar-chip')];
-    const sig = chips.map(c => c.title + c.style.cssText).join('|');
-    if (sig === profileSig && strip.querySelector('li')) return;
-    profileSig = sig;
-    const list = strip.querySelector('ul'); list.replaceChildren();
-    for (const chip of chips) {
-      const li = document.createElement('li');
-      const button = document.createElement('button'); button.type = 'button'; button.className = 'jd-more-profile'; button.dataset.i18nSkip = '';
-      const color = chip.style.backgroundColor || memberColor(chip.title);
-      button.style.setProperty('--ring', color);
-      const avatar = document.createElement('span'); avatar.className = 'jd-more-avatar'; avatar.setAttribute('aria-hidden', 'true');
-      avatar.style.background = color;
-      if (chip.classList.contains('has-photo')) avatar.style.backgroundImage = chip.style.backgroundImage; else avatar.textContent = (chip.title || '?').trim().charAt(0).toUpperCase();
-      const name = document.createElement('span'); name.className = 'jd-more-name'; name.textContent = chip.title;
-      button.append(avatar, name);
-      button.addEventListener('click', () => document.querySelector('.tool-grid [data-tool="Family"]')?.click());
-      li.append(button); list.append(li);
-    }
-    const li = document.createElement('li');
-    li.innerHTML = `<button type="button" class="jd-more-profile jd-more-add"><span class="jd-more-avatar" aria-hidden="true">${ICONS.plus}</span><span class="jd-more-name">Add profile</span></button>`;
-    li.querySelector('button').addEventListener('click', () => { document.querySelector('.tool-grid [data-tool="Family"]')?.click(); setTimeout(() => document.querySelector('.members-panel .member-form input[name="name"]')?.focus(), 400); });
-    list.append(li);
-    window.jdTranslate?.();
   }
 
   function enhanceMore() {
@@ -110,21 +72,7 @@
       (card.querySelector('h2') ?? grid).before(title);
     }
     decorateTiles(grid);
-    // Language + moon rows -> one preference sheet below the tiles.
-    let prefs = card.querySelector('.jd-more-prefs');
-    if (!prefs) {
-      prefs = document.createElement('section'); prefs.className = 'jd-more-prefs';
-      prefs.innerHTML = '<h3 class="jd-more-section">Display & language</h3><div class="jd-sheet"></div>';
-      card.append(prefs);
-    }
-    const sheet = prefs.querySelector('.jd-sheet');
-    card.querySelectorAll(':scope > .language-row').forEach(row => {
-      const moon = row.classList.contains('moon-row');
-      if (!row.querySelector('.jd-tile-ic')) row.insertAdjacentHTML('afterbegin', `<span class="jd-tile-ic" data-tone="${moon ? 'lav' : 'sky'}" aria-hidden="true">${moon ? ICONS.moon : ICONS.globe}</span>`);
-      row.classList.add('jd-row-item'); row.querySelector('input[type="checkbox"]')?.classList.add('jd-toggle');
-      if (moon) sheet.append(row); else sheet.prepend(row);
-    });
-    renderProfiles(card);
+    // Language and moon rows stay in the DOM for other scripts, but both settings live under Settings and are hidden here (CSS).
   }
 
   const run = () => { try { enhanceMore(); } catch { /* purely visual */ } };

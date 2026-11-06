@@ -1,5 +1,5 @@
 // lists-plus: Lists tab (overview of unlimited lists, pinned Shopping list, per-list emoji + sort mode,
-// checked items sink to the bottom, quick-add, clear completed + undo) and a Today card for the Shopping list.
+// checked items sink to the bottom, quick-add, clear completed + undo).
 // Shopping list = tile grid (docs/design.md "Listen / Einkauf"): tabs "Shopping list | Products", search/add field,
 // category chips, beige tiles with emoji + quantity stepper; a built-in product catalog allows one-tap adding.
 // Quantities live in the item title ("2 Milch", "400 g Spaghetti") so the list API stays unchanged.
@@ -305,7 +305,7 @@
       if (!navigator.onLine && window.jdListQueue) { window.jdListQueue.push({ title, listName }); say('List item saved locally; sync pending'); await renderItems(); input.focus(); return; }
       try { const created = await api('/api/lists/items', 'POST', { title, listName }); if (created?.queued) { localPending.push({ title, listName }); say('List item saved locally; sync pending'); } else say('List item added'); }
       catch { window.jdListQueue?.push({ title, listName }); say('List item saved locally; sync pending'); }
-      await renderItems(); refreshCounts(); refreshToday(); input.focus();
+      await renderItems(); refreshCounts(); input.focus();
     }); });
     root.querySelector('.lp-clear').addEventListener('click', () => guard(async () => {
       if (!window.confirm(T('Clear completed list items?'))) return;
@@ -328,7 +328,6 @@
 
   // Refresh only the visible parts: counts in the overview chips + the selected list.
   async function refresh() {
-    refreshToday();
     if (!host?.isConnected || host.hidden || !host.querySelector('.lists-plus')) return;
     await refreshCounts();
     await renderItems();
@@ -350,24 +349,12 @@
     return { added, skipped };
   }
 
-  // Today card: open Shopping list items as mini tiles, check off directly.
-  async function refreshToday() {
-    const column = document.querySelector('.today-grid .side-column'); if (!column) return;
-    let card = column.querySelector('.lp-today');
-    if (!card) { card = document.createElement('article'); card.className = 'card lp-today'; column.append(card); }
-    const items = await api(`/api/lists/items?list=${SHOP}&limit=200`).catch(() => null); if (!items) return;
-    const open = items.filter(item => !item.completed).reverse();
-    card.innerHTML = `<div class="card-heading"><div><p class="eyebrow">🛒 Shopping list</p><h2><span class="lp-count-big">${open.length}</span> <span>open items</span></h2></div><a href="#lists" class="text-link lp-open-shopping">See all</a></div>${open.length ? `<ul class="lp-items lp-today-grid">${open.slice(0, 6).map(item => { const parts = splitQty(item.title); return `<li class="lp-today-item" data-id="${esc(item.id)}" data-action-ready="true"><button type="button" class="lp-check" aria-pressed="false" aria-label="Check ${esc(item.title)}"><span class="lp-tile-emoji" aria-hidden="true">${emojiFor(item.title)?.emoji ?? '🛒'}</span><span class="lp-title-text" data-i18n-skip>${esc(parts.name)}</span>${parts.qty !== 1 || parts.unit ? `<small data-i18n-skip>${esc(qtyLabel(parts))}</small>` : ''}</button></li>`; }).join('')}</ul>${open.length > 6 ? `<p class="muted">+${open.length - 6}</p>` : ''}` : '<p class="muted">Nothing to buy right now.</p>'}`;
-    card.querySelectorAll('.lp-check').forEach(button => button.addEventListener('click', async () => { try { await api(`/api/lists/items/${button.closest('li').dataset.id}/check`, 'POST'); say('List item checked'); refresh(); } catch { say('List item action unavailable; Today remains available'); } }));
-    window.jdTranslate?.();
-  }
-
   window.jdListsPlus = { render, refresh, addItems, normalize, splitQty, productFor, catalog: CATALOG, SHOPPING: SHOP };
   window.addEventListener('jd-lists-changed', () => refresh());
   window.addEventListener('online', () => setTimeout(refresh, 1200));
   document.addEventListener('click', event => { if (!event.target.closest?.('.lp-menu, .lp-more')) closeMenus(); });
   // Window capture runs before navigation.js's document-capture handler (which stops propagation).
-  window.addEventListener('click', event => { if (event.target.closest?.('.lp-open-shopping')) { select(SHOP); shopTab = 'list'; } if (event.target.closest?.('a[href="#today"]')) setTimeout(refreshToday, 50); }, true);
+  window.addEventListener('click', event => { if (event.target.closest?.('.lp-open-shopping')) { select(SHOP); shopTab = 'list'; } }, true);
   window.jdExtras?.subscribe('listMeta', () => { if (host?.isConnected && !host.hidden && host.querySelector('.lists-plus') && !document.activeElement?.closest?.('.lists-plus')) render(); });
   window.jdI18nExtend?.({
     'Shopping list': 'Einkaufsliste', 'All lists': 'Alle Listen', '＋ New list': '＋ Neue Liste', 'Change list emoji': 'Listen-Emoji ändern', 'Sort order': 'Sortierung', 'Manual': 'Manuell', 'Rename': 'Umbenennen', 'Delete list': 'Liste löschen',
@@ -377,5 +364,4 @@
     'Products': 'Zutaten', 'Groceries': 'Einkauf', 'Search or add an item': 'Suchen oder hinzufügen …', 'Press Enter to add': 'Enter fügt hinzu:', 'No matches.': 'Nichts gefunden.', 'Nothing to buy yet. Tap a product or type an item above.': 'Noch nichts auf der Liste. Tippe auf eine Zutat oder gib oben etwas ein.',
     'Quantity': 'Menge', 'Fewer of': 'Weniger', 'More of': 'Mehr', 'Options for': 'Optionen für', 'Move up': 'Nach oben', 'Move down': 'Nach unten', 'List item reopened': 'Listeneintrag wieder geöffnet'
   });
-  document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', refreshToday) : refreshToday();
 })();
